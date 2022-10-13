@@ -27,6 +27,19 @@ A partir de 2022 los ecuatorianos que están obligados a declarar el impuesto a 
 
 - Navega en los menus desplegables para definir de manera aducada tu perfil de contribuyente, vas a encontrar campos relacionados a tu actividad económica, tu relación con otras fuentes de ingresos, entre otros detalles. 
 
+- Para los calculos del impuesto a la renta hemos desarollado la libreria `ircalculatoR` la cual podras instalar de la siuiente manera:
+
+```
+
+library(remotes)
+
+install_github("https://github.com/AlexB4891/ircalculatoR")
+
+```
+  Encuentra ejemplos del código sobr algunos ejemplos en el enlace:
+  
+  <URL de una presentación Quarto>
+  
 
 ## Detalles técnicos
 
