@@ -43,6 +43,12 @@ library(shiny)
 
 ```
 
+- Submision type: *Single table example*
+
+- Categoria: `interactive-Shiny`
+
+- Industry: *public sector*, *tax administration*
+
 Revisa la aplicación en el siguiente enlace:
 
 <URL de la aplicacion/tabla>
