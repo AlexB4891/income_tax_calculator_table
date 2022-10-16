@@ -25,7 +25,7 @@ A partir de 2022 los ecuatorianos que están obligados a declarar el impuesto a 
 
   - <https://www.sri.gob.ec/web/intersri/ruc-personas-naturales>
   
-  - <Documento que explique que es la relacion de dependencia>
+  - Documento que explique que es la relacion de dependencia
   
   - Impuesto a la renta de personas naturales
   
