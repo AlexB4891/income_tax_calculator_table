@@ -1,0 +1,4 @@
+- source: prueba.qmd
+  quarto-pub:
+    - id: 13e376d2-cca5-44cc-a845-ae205775cc84
+      url: 'https://quartopub.com/sites/alexvbr/income-tax-calculator-table-for-labor-contracts-in-ecuador'

@@ -1,0 +1,2 @@
+### ¿Qué es el impuesto a la renta ?
+El impuesto a la renta se aplica sobre aquellas rentas que obtengan las personas naturales, $suces_ind  y las sociedades sean nacionales o extranjeras. El ejercicio impositivo comprende del 1 de enero al 31 de diciembre (Asamblea Nacional del Ecuador, 2004; Presidencia de la República del Ecuador, 2010). En cuanto a las personas naturales, aquellas que tengan una relación bajo dependencia o no, que estén o no $obligadas a llevar contabilidad , tienen la obligatoriedad de realizar su declaración de impuesto a la renta anual.

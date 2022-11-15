@@ -1,0 +1,142 @@
+.quarto-title-banner {
+    margin-bottom: 1em;
+    color: #f48c06;
+    background: #4e5c68;
+}
+
+h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+    margin-top: 0;
+    margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #f48c06;
+}
+
+.tippy-box[data-theme~=quarto] {
+    background-color: #808080;
+    color: #fff;
+    border-radius: .25rem;
+    border: solid 1px #dee2e6;
+    font-size: .875rem;
+    position: absolute;
+}
+
+a {
+    color: #ceb97a;
+    text-decoration: underline;
+    -webkit-text-decoration: underline;
+    -moz-text-decoration: underline;
+    -ms-text-decoration: underline;
+    -o-text-decoration: underline;
+}
+
+.column {
+  float: left;
+  width: 44%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: white;
+    background-color: #051052;
+    background-clip: padding-box;
+    border: 1px solid #051052;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-control:focus {
+    color: white;
+    background-color: #051052;
+    border-color: #051052;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+.selectize-control.single .selectize-input, .selectize-control.single .selectize-input input {
+    cursor: pointer;
+    color: white;
+    background: #051052 !important;
+}
+.selectize-input > input {
+    color: white;
+    display: inline-block !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    text-indent: 0 !important;
+    border: 0 #051052 !important;
+    background: #051052 !important;
+    line-height: inherit !important;
+    -webkit-user-select: auto !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.selectize-dropdown, .selectize-input, .selectize-input input {
+    color: white;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 20px;
+    -webkit-font-smoothing: inherit;
+}
+
+.selectize-input, .selectize-control.single .selectize-input.input-active input{
+    color: white;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 20px;
+    background: #051052 !important;
+    -webkit-font-smoothing: inherit;
+}
+
+.panel-input{
+    color: white;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 20px;
+    background: #03071e !important;
+    -webkit-font-smoothing: inherit;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #212529;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: .3rem;
+    outline: 0;
+}
+
+
+
+.tabs-above > .nav > li[class=active] > a {
+           background-color: #000;
+           color: #FFF;
+        }
