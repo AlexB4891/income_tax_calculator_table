@@ -37,6 +37,7 @@ library(gtExtras)
 library(sparkline)
 library(plotly)
 library(shinyWidgets)
+library(pins)
 
 franjas <- read_excel("data/franjas.xlsx")
 
@@ -47,6 +48,11 @@ basic_theme <- function(data, ...){
       ...
     )
 }
+
+carpeta <- board_register_github(repo = "AlexB4891/taller_codam_2022",
+                                 branch = "main",
+                                 token = "...")
+
 
 ```
 
@@ -237,7 +243,7 @@ observeEvent(input$datos,
                      placement = "right"),
                  with_tippy(
                    numericInput(inputId = "gasto_vestimenta", 
-                                label =  "Alimentación",
+                                label =  "Vestimenta",
                                 min = 1,
                                 max = 999999,
                                 value = 472),
@@ -266,8 +272,8 @@ observeEvent(input$datos,
                  footer = tagList(
                    actionButton(inputId = "procesar",
                                 label = "Continuar",width = "100%") ,
-                   size = "l", style = "overflow-x: auto;"
-                 )
+                   size = "l"
+                 ), style = "overflow-x: auto;"
                )
              )
 )
@@ -286,6 +292,27 @@ En esta tabla encuentra un resumen de tus ingresos,  gastos personales y con ell
 observeEvent(input$procesar,{
   
   removeModal()
+  
+  pin_get(board = carpeta,
+          name = "tabla_impuesto_renta") %>% 
+    bind_rows(
+     
+      tibble(vivienda = input$gasto_vivienda,
+         educacion = input$gasto_educa,
+         salud = input$gasto_salud,
+         alimentacion = input$gasto_alimen,
+         vestimenta = input$gasto_vestimenta,
+         turismo =  input$gasto_turismo,
+         sexo = input$genero,
+         nombre = input$nombre)  
+    ) %>% 
+    pin(x = .,
+        name = "tabla_impuesto_renta",
+        board = carpeta,
+        description = "Ejecucion",
+        versiones = T)
+  
+  
   
 })
 
