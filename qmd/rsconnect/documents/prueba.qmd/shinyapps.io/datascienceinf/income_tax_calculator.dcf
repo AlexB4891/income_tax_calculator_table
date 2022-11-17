@@ -4,13 +4,12 @@ username:
 account: datascienceinf
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 7637208
-bundleId: 6517649
+appId: 7638650
+bundleId: 6517815
 url: https://datascienceinf.shinyapps.io/income_tax_calculator/
-when: 1668544305.55913
-lastSyncTime: 1668544305.55914
+when: 1668547119.88373
+lastSyncTime: 1668547119.88376
 quarto_version: 1.0.36
 quarto_engines: knitr
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: _publish.yml|theme.scss|tippytest.html|tippytest.qmd|tippytest_files

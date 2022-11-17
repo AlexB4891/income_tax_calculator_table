@@ -139,6 +139,8 @@ observeEvent(input$close_glo_bas,{
   removeModal()
 })
 
+############################ AQUI
+
 observeEvent(input$datos,
              showModal(
                modalDialog(
@@ -146,34 +148,34 @@ observeEvent(input$datos,
                  fluidRow(
                    column(6,
                           textInput(inputId = "nombre", 
-                                    label =  "¿Cómo te llamas?",
+                                    label =  "¿Cómo te llamas?", ## AWUI
                                     value = "Don Telesforo")
                    ),
                    column(6,
                           selectInput(inputId = "genero", 
-                                      label =  "¿Con que género te identificas?",
-                                      choices = c("Masculino","Femenino","Otro"),
-                                      selected = "Masculino"))
+                                      label =  "¿Con que género te identificas?", ## AWUI
+                                      choices = c("Masculino","Femenino","Otro"), ## AWUI
+                                      selected = "Masculino")) ## AWUI
                  ),
                    with_tippy(
                      numericInput(inputId = "ingreso_lab", 
-                                  label =  "¿Cual es tu salario mensual?",
+                                  label =  "¿Cual es tu salario mensual?", ## AWUI
                                   min = 1,
                                   max = 999999,
                                   value = 472),
-                     tooltip = "Considera unicamente los ingresos bajo relación de dependencia", 
+                     tooltip = "Considera unicamente los ingresos bajo relación de dependencia",  ## AWUI
                      placement = "right"
                    ),
                     
                           with_tippy(
                           sliderInput(inputId = "meses",
-                                      label = "Número de meses trabajados:",
+                                      label = "Número de meses trabajados:", ## AWUI
                                       min = 1,
                                       max = 12,
                                       value = 12),
-                     tooltip = "Número de meses que trabajas con un mismo empleador", 
+                     tooltip = "Número de meses que trabajas con un mismo empleador",  ## AWUI
                      placement = "right"),
-                   h2("Declaración de gastos personales"),
+                   h2("Declaración de gastos personales"), ## AWUI
                  with_tippy(
                    numericInput(inputId = "gasto_vivienda", 
                                 label =  "Vivienda",
@@ -188,7 +190,7 @@ observeEvent(input$datos,
                                   <li>Pensiones alimenticias
                                   <li>Otros gastos destinados a la adquisición, construcción, remodelación, ampliación, mejora y mantenimiento de un único bien inmueble. 
                                   </ul> 
-                                  En todos los casos señalados en este rubro y en los anteriores, los gastos serán considerados en razón de una sola vivienda."), 
+                                  En todos los casos señalados en este rubro y en los anteriores, los gastos serán considerados en razón de una sola vivienda."),  ## AWUI
                      placement = "right"),
                  with_tippy(
                    numericInput(inputId = "gasto_educa", 
@@ -206,7 +208,7 @@ observeEvent(input$datos,
                                   <li>Promoción y difusión de la memoria social y el patrimonio
                                   <li>Artesanías
                                   <li>Pensiones alimenticias
-                                  </ul>"), 
+                                  </ul>"), ## AWUI
                      placement = "right"),
                    
                   with_tippy(
@@ -223,11 +225,11 @@ observeEvent(input$datos,
                                   <li>Deducible no reembolsado de la liquidación del seguro privado
                                   <li>Pensiones alimenticias
                                   <li>Otros gastos: Relacionados para el bienestar físico y mental, así como aquellos destinados a la prevención, recuperación y rehabilitación de la salud
-                                  </ul>"), 
+                                  </ul>"), ## AWUI
                      placement = "right"),
                  with_tippy(
                    numericInput(inputId = "gasto_alimen", 
-                                label =  "Alimentación",
+                                label =  "Alimentación", ## AWUI
                                 min = 1,
                                 max = 999999,
                                 value = 472),
@@ -235,22 +237,22 @@ observeEvent(input$datos,
                                   <li>Compras de alimentos para consumo humano y otros productos naturales o artificiales que el ser humano ingiere para subsistir o para su nutrición
                                   <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
                                   <li>Compra de alimentos en centros de expendio de alimentos preparados.
-                                  </ul>"), 
+                                  </ul>"), ## AWUI
                      placement = "right"),
                  with_tippy(
                    numericInput(inputId = "gasto_vestimenta", 
-                                label =  "Vestimenta",
+                                label =  "Vestimenta",## AWUI
                                 min = 1,
                                 max = 999999,
                                 value = 472),
                    tooltip = HTML("<ul>
                                   <li>Se considerarán gastos de vestimenta los realizados por cualquier tipo de prenda de vestir
                                   <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
-                                  </ul>"), 
+                                  </ul>"), ## AWUI
                      placement = "right"),
                  with_tippy(
                    numericInput(inputId = "gasto_turismo", 
-                                label =  "Turismo",
+                                label =  "Turismo", ## AWUI
                                 min = 1,
                                 max = 999999,
                                 value = 472),
@@ -262,12 +264,12 @@ observeEvent(input$datos,
                                   <li>Intermediación turísticas
                                   <li>Parques de atracciones
                                   <li>Pensiones alimentacias
-                                  </ul>"), 
+                                  </ul>"), ## AWUI
                      placement = "right"),
                  
                  footer = tagList(
                    actionButton(inputId = "procesar",
-                                label = "Continuar",width = "100%") ,
+                                label = "Continuar",width = "100%") , ## AWUI
                    size = "l"
                  ), style = "overflow-x: auto;"
                )
@@ -321,7 +323,7 @@ tabla_presentar <- reactiveValues(
                      "Salud",
                      "Alimentación",
                      "Vestimenta",
-                     "Turismo"),
+                     "Turismo"), ## AWUI
      gastos_valor = c( 3000, # input$gasto_vivienda,
                        2160, # input$gasto_educa,
                        1800, # input$gasto_salud,
@@ -342,7 +344,7 @@ observeEvent(input$procesar,{
                      "Salud",
                      "Alimentación",
                      "Vestimenta",
-                     "Turismo"),
+                     "Turismo"), ## AWUI
     gastos_valor = c(input$gasto_vivienda,
                      input$gasto_educa,
                      input$gasto_salud,
@@ -394,10 +396,10 @@ resumen_impositivo_long <- reactive({
                   scales::percent)) %>% 
     pivot_longer(cols = everything()) %>% 
     mutate(name = case_when(
-      name == "fraccion_basica" ~ "Fracción básica (c)",
-      name == "impuesto_fraccion" ~ "Impuesto sobre la fracción básica (d)",
-      name == "impuesto_excedente" ~ "Tasa sobre el excedente (e)",
-      name == "cuota" ~ "Cuota deducible (f)"
+      name == "fraccion_basica" ~ "Fracción básica (c)",   ## AWUI
+      name == "impuesto_fraccion" ~ "Impuesto sobre la fracción básica (d)",  ## AWUI
+      name == "impuesto_excedente" ~ "Tasa sobre el excedente (e)", ## AWUI
+      name == "cuota" ~ "Cuota deducible (f)"## AWUI
     )) %>% 
     bind_rows(tibble(name = c(NA_character_,NA_character_),
                      value = c(NA_character_,NA_character_)))
@@ -429,21 +431,21 @@ output$tabla_argumentos <- render_gt({
     cols_hide(columns = c(total,saldo,otros,gasto_copia)) %>%
     cols_align(columns = everything(),align = "center") %>% 
     cols_label(
-      ingresos = md("**Ingresos (a)**"),
+      ingresos = md("**Ingresos (a)**"), ## AWUI
       gastos_clase = "",
-      gastos_valor = md("**Valor**"),
-      name = md("**Concepto**"),
-      value = md("**Valor**")) %>%
+      gastos_valor = md("**Valor**"), ## AWUI
+      name = md("**Concepto**"), ## AWUI
+      value = md("**Valor**")) %>% ## AWUI
     sub_missing(
       columns = c(ingresos,
                   name,
                   value),
       missing_text = ""
     ) %>% 
-    tab_spanner(label =  md("**Gastos personales (b)**"),
+    tab_spanner(label =  md("**Gastos personales (b)**"), ## AWUI
                 columns = c(gastos_clase,
                             gastos_valor)) %>%
-    tab_spanner(label =  md("**Resumen impositivo**"),
+    tab_spanner(label =  md("**Resumen impositivo**"), ## AWUI
                 columns = c(name,
                             value))  %>%
     fmt_currency(
@@ -530,7 +532,7 @@ output$tabla_resultado <- render_gt({
       preliminar_2 = md('<p align="right">Total gastos (b)<br> x Cuota deducible (f) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Deducción gastos p. (h)</b></p>'),
       preliminar_3 = md('<p align="right">Ingresos gravados (g)<br> x Tasa excedente (e) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Impuesto preliminar (i)</b></p>'),
       total = md('<p align="right">Impuesto preliminar (i)<br> + Impuesto sobre fracción (d)<br> - Deducción gastos (h) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /><b> Impuesto a la renta</b></p>'),
-      tie = md("**¿Cuanto representa el IR en mis ingresos?**")) %>%
+      tie = md("**¿Cuanto representa el IR en mis ingresos?**")) %>% ## AWUI
     fmt_currency(
       columns = c(preliminar_1,
                   preliminar_2,
@@ -568,7 +570,7 @@ output$mensaje <- renderUI({
          </ol>
          Verifica el último dígito de tu cédula para verificar la fecha de declaración.
           ")
-     
+      ## AWUI
    }else{
      HTML(str_c("
          <b>El total de impuesto a la renta</b> que debes pagar es de ", impuesto,"$ USD"), 
@@ -582,6 +584,8 @@ output$mensaje <- renderUI({
          Verifica el último dígito de tu cédula para verificar la fecha de declaración.
          <br>
           ")
+     
+     ## AWUI
    }
   
 })
@@ -685,7 +689,7 @@ uiOutput("mensaje")
             inputIds = c("glo_gas", "glo_ing", "glo_bas"),
             labels = list("Glosario de gastos",
                           "Glosario de ingresos",
-                          "Glosario base imponible"),
+                          "Glosario base imponible"), ## AWUI
             status = "primary",
             fullwidth = TRUE
         )
