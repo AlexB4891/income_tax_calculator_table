@@ -19,6 +19,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
     border: solid 1px #dee2e6;
     font-size: .875rem;
     position: absolute;
+    width: 500px;
 }
 
 a {
@@ -28,6 +29,13 @@ a {
     -moz-text-decoration: underline;
     -ms-text-decoration: underline;
     -o-text-decoration: underline;
+}
+
+p {
+    margin-top: 0;
+    margin-left: 20px;
+    margin-bottom: 1rem;
+    text-align: justify;
 }
 
 .column {
@@ -136,7 +144,10 @@ a {
 
 
 
-.tabs-above > .nav > li[class=active] > a {
-           background-color: #000;
-           color: #FFF;
-        }
+.btn-default {
+    color: #f48c06;
+    background-color: #808080;
+    border-color: #dee2e6;
+}
+        
+      

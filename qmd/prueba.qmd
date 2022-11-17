@@ -52,7 +52,7 @@ basic_theme <- function(data, ...){
 
 ```
 
-## Primeros pasos
+## Conceptos principales
 
 <div class="row">
 
@@ -61,14 +61,16 @@ basic_theme <- function(data, ...){
 
 ------------------------------------------------------------------------
 
-El impuesto a la renta[^1] se aplica sobre aquellas rentas que obtengan las personas naturales, las sucesiones indivisas y las sociedades sean nacionales o extranjeras. El ejercicio impositivo comprende del 1 de enero al 31 de diciembre (Asamblea Nacional del Ecuador, 2004; Presidencia de la República del Ecuador, 2010).
+El impuesto a la renta[^1] se aplica sobre aquellas rentas que obtengan las personas naturales, las sucesiones indivisas[^2] y las sociedades sean nacionales o extranjeras. El ejercicio impositivo comprende del 1 de enero al 31 de diciembre (Asamblea Nacional del Ecuador, 2004; Presidencia de la República del Ecuador, 2010).
 
-En cuanto a las personas naturales, aquellas que tengan una relación bajo dependencia o no, que estén o no obligadas[^2] a llevar contabilidad , tienen la obligatoriedad de realizar su declaración de impuesto a la renta anual.
+En cuanto a las personas naturales, aquellas que tengan una relación bajo dependencia o no, que estén o no obligadas[^3] a llevar contabilidad , tienen la obligatoriedad de realizar su declaración de impuesto a la renta anual.
 :::
 
 [^1]: Artículo 2 Ley Orgánica de Régimen Tributario Interno y artículo 1 del Reglamento de la Ley.
 
 [^2]: Las sucesiones indivisas para la liquidación del impuesto a la renta son consideradas como unidades económicas independientes, es decir, que se entienden y tratan como una persona natural. Las sucesiones indivisas son contribuyentes temporales, su existencia comienza con la muerte de una persona natural y termina por orden judicial o por testamento del difunto, es decir, cuando los herederos incorporan la herencia del fallecido a su propio patrimonio (Presidencia de la República del Ecuador, 2010).
+
+[^3]: Son obligados a llevar contabilidad quienes cumplan los siguientes criterios: i) \$300.000 dólares de ingresos brutos en el ejercicio fiscal anterior, ii) \$240.000 dólares de costos y gastos en el ejercicio fiscal anterior, y iii) $180.000 dólares por capital propio al primero de enero de 2022 o al inicio de la actividad (Servicio de Rentas Internas, 2021).  .
 
 ::: column
 ### Relación de dependencia
@@ -83,6 +85,8 @@ Con base en este artículo, la condición de relación bajo dependencia alude a 
 <br>
 
 ------------------------------------------------------------------------
+
+## Cálculo del impuesto a la renta 2022
 
 **El ejemplo está desarrollado para una persona que al mes tiene como ingresos 3 salario básico unificado (SBU 2022), es decir 1416 USD, si quieres generar tu propio cálculo da click en el botón**
 
@@ -143,6 +147,7 @@ observeEvent(input$datos,
              showModal(
                modalDialog(
                  h2("Cueentanos un poco sobre ti:"),
+                 HTML("Para declarar tus ingresos y gastos considera valores mensuales."),
                  fluidRow(
                    column(6,
                           textInput(inputId = "nombre", 
@@ -161,7 +166,16 @@ observeEvent(input$datos,
                                   min = 1,
                                   max = 999999,
                                   value = 472),
-                     tooltip = "Considera unicamente los ingresos bajo relación de dependencia", 
+                     tooltip = "Considera unicamente los ingresos bajo relación de dependencia. Tu salario mensual corresponde a tu ingreso líquido menos tus aportaciones al IESS.", 
+                     placement = "right"
+                   ),
+                  with_tippy(
+                     numericInput(inputId = "ingreso_extra", 
+                                  label =  "¿Recibes otros ingresos como: utilidades, comisiones, horas extras u otros sobresueldos?",
+                                  min = 1,
+                                  max = 999999,
+                                  value = 500),
+                     tooltip = "Estos ingresos se sumaran a tus ingresos laborales totales.", 
                      placement = "right"
                    ),
                     
