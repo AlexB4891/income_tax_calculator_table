@@ -25,6 +25,8 @@ project:
 
 #| include: false 
 
+#  Libraries:
+
 library(shiny)
 library(tidyverse)
 library(gt)
@@ -39,14 +41,21 @@ library(plotly)
 library(shinyWidgets)
 library(pins)
 
+# File with the exempt income brackets
+
 franjas <- read_excel("data/franjas.xlsx")
 
-basic_theme <- function(data, ...){
+# Custom theme for the tables in the app:
+
+table_theme <- function(data, ...){
   data %>% 
     tab_options(
       table.background.color = "#03071e",
+      column_labels.background.color = "#3b499c",
+      row.striping.background_color = "#051052",
       ...
-    )
+    ) %>% 
+    opt_row_striping()
 }
 
 
@@ -87,14 +96,199 @@ Con base en este artículo, la condición de relación bajo dependencia alude a 
 **El ejemplo está desarrollado para una persona que al mes tiene como ingresos 3 salario básico unificado (SBU 2022), es decir 1275 USD, si quieres generar tu propio cálculo da click en el botón**
 
 ```{r}
-actionButton(inputId = "datos",label = "Ingresa tus datos",width = "100%")
+
+# Init button:
+
+actionButton(inputId = "datos",
+             label = "Ingresa tus datos",
+             width = "100%")
 ```
 
 <br>
 
 
-```{r}
+```{r modal-events}
 #| context: server
+
+# Launch the modal dialog with all the inputs:
+
+observeEvent(input$datos,{
+  showModal(
+    modalDialog(
+      h2("Cuentanos un poco sobre ti:"),
+      HTML("Para declarar tus ingresos y gastos considera valores mensuales."),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "ingreso_lab", 
+                     label =   div(icon("money-bill-wheat", style = "color:white;"),
+                                   HTML("	&nbsp;	&nbsp;	&nbsp;¿Cual es tu salario mensual?")),
+                     min = 1,
+                     max = 999999,
+                     value = 472),
+        tooltip = "Considera unicamente los ingresos bajo relación de dependencia. Tu salario mensual corresponde a tu ingreso líquido menos tus aportaciones al IESS.", 
+        placement = "right"
+      ),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "ingreso_extra", 
+                     label =  div(icon("money-bill-trend-up", style = "color:white;"),
+                                  HTML("	&nbsp;	&nbsp;	&nbsp;¿Recibes otros ingresos como: utilidades, comisiones, horas extras u otros sobresueldos?")),
+                     min = 1,
+                     max = 999999,
+                     value = 500),
+        tooltip = "Estos ingresos se sumaran a tus ingresos laborales totales. Considera un estimado anual.", 
+        placement = "right"
+      ),
+      hr(),
+      with_tippy(
+        sliderInput(inputId = "meses",
+                    label = div(icon("calendar-days", style = "color:white;"),
+                                HTML("	&nbsp;	&nbsp;	&nbsp;Número de meses trabajados:")),
+                    min = 1,
+                    max = 12,
+                    value = 12),
+        tooltip = "Número de meses que trabajas con un mismo empleador", 
+        placement = "right"),
+      h2("Declaración de gastos personales"),
+      HTML("Para declarar tus ingresos y gastos considera valores valores estimados anuales."),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "gasto_vivienda", 
+                     label =  div(icon("house", style = "color:white;"),
+                                  HTML("	&nbsp;	&nbsp;	&nbsp;Vivienda")),
+                     min = 1,
+                     max = 999999,
+                     value = 472),
+        tooltip = HTML("<ul>
+                        <li>Arriendo 
+                        <li>Intereses préstamo hipotecario 
+                        <li>Servicios básicos
+                        <li>Impuesto predial 
+                        <li>Pensiones alimenticias
+                        <li>Otros gastos destinados a la adquisición, construcción, remodelación, ampliación, mejora y mantenimiento de un único bien inmueble. 
+                        </ul> 
+En todos los casos señalados en este rubro y en los anteriores, los gastos serán considerados en razón de una sola vivienda."), 
+        placement = "right"),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "gasto_educa", 
+               label =  div(icon("school", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Educación, arte y cultura")),
+               min = 1,
+               max = 999999,
+               value = 472),
+        tooltip = HTML("<ul>
+                        <li>Matrícula y pensión 
+                        <li>Útiles y textos escolares 
+                        <li>Educación para personas con discapacidad
+                        <li>Cuidado y/o desarrollo infantil 
+                        <li>Uniformes
+                        <li>Artes vivas y escénicas, literarias y narrativas, cinematográficas y audiovisuales, musicales y sonoras
+                        <li>Promoción y difusión de la memoria social y el patrimonio
+                        <li>Artesanías
+                        <li>Pensiones alimenticias
+                        </ul>"), 
+        placement = "right"),
+hr(),
+    with_tippy(
+      numericInput(inputId = "gasto_salud", 
+                   label =  div(icon("notes-medical", style = "color:white;"),
+                                HTML("	&nbsp;	&nbsp;	&nbsp;Salud")),
+                   min = 1,
+                   max = 999999,
+                   value = 472),
+      tooltip = HTML("<ul>
+                        <li>Honorarios profesionales de salud
+                        <li>Servicios de salud
+                        <li>Medicamentos, insumos médicos, lentes, órtesis, prótesis y otros accesorios para la salud
+                        <li>Medicina prepagada y prima de seguro médico
+                        <li>Deducible no reembolsado de la liquidación del seguro privado
+                        <li>Pensiones alimenticias
+                        <li>Otros gastos: Relacionados para el bienestar físico y mental, así como aquellos destinados a la prevención, recuperación y rehabilitación de la salud
+                        </ul>"), 
+      placement = "right"),
+hr(),
+with_tippy(
+  numericInput(inputId = "gasto_alimen", 
+               label =  div(icon("utensils", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Alimentación")),
+               min = 1,
+               max = 999999,
+               value = 472),
+  tooltip = HTML("<ul>
+                        <li>Compras de alimentos para consumo humano y otros productos naturales o artificiales que el ser humano ingiere para subsistir o para su nutrición
+                        <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
+                        <li>Compra de alimentos en centros de expendio de alimentos preparados.
+                        </ul>"), 
+  placement = "right"),
+hr(),
+with_tippy(
+  numericInput(inputId = "gasto_vestimenta", 
+               label =  div(icon("shirt", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Vestimenta")),
+               min = 1,
+               max = 999999,
+               value = 472),
+  tooltip = HTML("<ul>
+                        <li>Se considerarán gastos de vestimenta los realizados por cualquier tipo de prenda de vestir
+                        <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
+                        </ul>"), 
+  placement = "right"),
+hr(),
+with_tippy(
+  numericInput(inputId = "gasto_turismo", 
+               label =  div(icon("compass", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Turismo")),
+               min = 1,
+               max = 999999,
+               value = 472),
+  tooltip = HTML("<ul>
+                        <li>Alojamiento
+                        <li>Transporte
+                        <li>Servicios de alimentos y bebidas
+                        <li>Operación turística
+                        <li>Intermediación turísticas
+                        <li>Parques de atracciones
+                        <li>Pensiones alimentacias
+                        </ul>"), 
+  placement = "right"),
+
+footer = tagList(
+  actionButton(inputId = "procesar",
+               label = "Continuar",width = "100%") ,
+  size = "l"
+), style = "overflow-x: auto;"
+    )
+  )
+})
+
+# Execute the calculations:
+
+observeEvent(input$procesar,{
+  
+  tabla_presentar$presentar <- tibble(
+    ingresos = c(input$ingreso_lab*input$meses + input$ingreso_extra,
+                 NA_real_,NA_real_,NA_real_,NA_real_,NA_real_),
+    gastos_clase = c("Vivienda",
+                     "Educación, arte y cultura",
+                     "Salud",
+                     "Alimentación",
+                     "Vestimenta",
+                     "Turismo"),
+    gastos_valor = c(input$gasto_vivienda,
+                     input$gasto_educa,
+                     input$gasto_salud,
+                     input$gasto_alimen,
+                     input$gasto_vestimenta,
+                     input$gasto_turismo)
+  )
+  
+  removeModal()
+})
+
+# Glosaries modals ------------------------------------------------
+
+# Expenses glosary:
 
 observeEvent(input$glo_gas,{
              showModal(
@@ -106,6 +300,12 @@ observeEvent(input$glo_gas,{
              )
   })
 
+observeEvent(input$close_glo_gas,{
+  removeModal()
+})
+
+# Income glosary:
+
 observeEvent(input$glo_ing,{
              showModal(
                modalDialog(
@@ -115,6 +315,12 @@ observeEvent(input$glo_ing,{
                )
              )
   })
+
+observeEvent(input$close_glo_ing,{
+  removeModal()
+})
+
+# Taxable income glosary:
 
 observeEvent(input$glo_bas,{
              showModal(
@@ -126,164 +332,9 @@ observeEvent(input$glo_bas,{
              )
   })
 
-
-observeEvent(input$close_glo_gas,{
-  removeModal()
-})
-
-observeEvent(input$close_glo_ing,{
-  removeModal()
-})
-
 observeEvent(input$close_glo_bas,{
   removeModal()
 })
-
-observeEvent(input$datos,
-             showModal(
-               modalDialog(
-                 h2("Cueentanos un poco sobre ti:"),
-                 HTML("Para declarar tus ingresos y gastos considera valores mensuales."),
-                 fluidRow(
-                   column(6,
-                          textInput(inputId = "nombre", 
-                                    label =  "¿Cómo te llamas?",
-                                    value = "Don Telesforo")
-                   ),
-                   column(6,
-                          selectInput(inputId = "genero", 
-                                      label =  "¿Con que género te identificas?",
-                                      choices = c("Masculino","Femenino","Otro"),
-                                      selected = "Masculino"))
-                 ),
-                   with_tippy(
-                     numericInput(inputId = "ingreso_lab", 
-                                  label =  "¿Cual es tu salario mensual?",
-                                  min = 1,
-                                  max = 999999,
-                                  value = 472),
-                     tooltip = "Considera unicamente los ingresos bajo relación de dependencia. Tu salario mensual corresponde a tu ingreso líquido menos tus aportaciones al IESS.", 
-                     placement = "right"
-                   ),
-                  with_tippy(
-                     numericInput(inputId = "ingreso_extra", 
-                                  label =  "¿Recibes otros ingresos como: utilidades, comisiones, horas extras u otros sobresueldos?",
-                                  min = 1,
-                                  max = 999999,
-                                  value = 500),
-                     tooltip = "Estos ingresos se sumaran a tus ingresos laborales totales.", 
-                     placement = "right"
-                   ),
-                    
-                          with_tippy(
-                          sliderInput(inputId = "meses",
-                                      label = "Número de meses trabajados:",
-                                      min = 1,
-                                      max = 12,
-                                      value = 12),
-                     tooltip = "Número de meses que trabajas con un mismo empleador", 
-                     placement = "right"),
-                   h2("Declaración de gastos personales"),
-                 with_tippy(
-                   numericInput(inputId = "gasto_vivienda", 
-                                label =  "Vivienda",
-                                min = 1,
-                                max = 999999,
-                                value = 472),
-                   tooltip = HTML("<ul>
-                                  <li>Arriendo 
-                                  <li>Intereses préstamo hipotecario 
-                                  <li>Servicios básicos
-                                  <li>Impuesto predial 
-                                  <li>Pensiones alimenticias
-                                  <li>Otros gastos destinados a la adquisición, construcción, remodelación, ampliación, mejora y mantenimiento de un único bien inmueble. 
-                                  </ul> 
-                                  En todos los casos señalados en este rubro y en los anteriores, los gastos serán considerados en razón de una sola vivienda."), 
-                     placement = "right"),
-                 with_tippy(
-                   numericInput(inputId = "gasto_educa", 
-                                label =  "Educación, arte y cultura",
-                                min = 1,
-                                max = 999999,
-                                value = 472),
-                   tooltip = HTML("<ul>
-                                  <li>Matrícula y pensión 
-                                  <li>Útiles y textos escolares 
-                                  <li>Educación para personas con discapacidad
-                                  <li>Cuidado y/o desarrollo infantil 
-                                  <li>Uniformes
-                                  <li>Artes vivas y escénicas, literarias y narrativas, cinematográficas y audiovisuales, musicales y sonoras
-                                  <li>Promoción y difusión de la memoria social y el patrimonio
-                                  <li>Artesanías
-                                  <li>Pensiones alimenticias
-                                  </ul>"), 
-                     placement = "right"),
-                   
-                  with_tippy(
-                   numericInput(inputId = "gasto_salud", 
-                                label =  "Salud",
-                                min = 1,
-                                max = 999999,
-                                value = 472),
-                   tooltip = HTML("<ul>
-                                  <li>Honorarios profesionales de salud
-                                  <li>Servicios de salud
-                                  <li>Medicamentos, insumos médicos, lentes, órtesis, prótesis y otros accesorios para la salud
-                                  <li>Medicina prepagada y prima de seguro médico
-                                  <li>Deducible no reembolsado de la liquidación del seguro privado
-                                  <li>Pensiones alimenticias
-                                  <li>Otros gastos: Relacionados para el bienestar físico y mental, así como aquellos destinados a la prevención, recuperación y rehabilitación de la salud
-                                  </ul>"), 
-                     placement = "right"),
-                 with_tippy(
-                   numericInput(inputId = "gasto_alimen", 
-                                label =  "Alimentación",
-                                min = 1,
-                                max = 999999,
-                                value = 472),
-                   tooltip = HTML("<ul>
-                                  <li>Compras de alimentos para consumo humano y otros productos naturales o artificiales que el ser humano ingiere para subsistir o para su nutrición
-                                  <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
-                                  <li>Compra de alimentos en centros de expendio de alimentos preparados.
-                                  </ul>"), 
-                     placement = "right"),
-                 with_tippy(
-                   numericInput(inputId = "gasto_vestimenta", 
-                                label =  "Vestimenta",
-                                min = 1,
-                                max = 999999,
-                                value = 472),
-                   tooltip = HTML("<ul>
-                                  <li>Se considerarán gastos de vestimenta los realizados por cualquier tipo de prenda de vestir
-                                  <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
-                                  </ul>"), 
-                     placement = "right"),
-                 with_tippy(
-                   numericInput(inputId = "gasto_turismo", 
-                                label =  "Turismo",
-                                min = 1,
-                                max = 999999,
-                                value = 472),
-                   tooltip = HTML("<ul>
-                                  <li>Alojamiento
-                                  <li>Transporte
-                                  <li>Servicios de alimentos y bebidas
-                                  <li>Operación turística
-                                  <li>Intermediación turísticas
-                                  <li>Parques de atracciones
-                                  <li>Pensiones alimentacias
-                                  </ul>"), 
-                     placement = "right"),
-                 
-                 footer = tagList(
-                   actionButton(inputId = "procesar",
-                                label = "Continuar",width = "100%") ,
-                   size = "l"
-                 ), style = "overflow-x: auto;"
-               )
-             )
-)
-
 
 
 ```
@@ -292,38 +343,15 @@ observeEvent(input$datos,
 
 En esta tabla encuentra un resumen de tus ingresos y  gastos personales.
 
-Adicioanlmente te presentamos un **resumen impositivo**, que te indica los parámetros a considerar en tu cálculo.
+Adicionalmente te presentamos un **resumen impositivo**, que te indica los parámetros a considerar en tu cálculo.
 
 ```{r}
 #| context: server
 
-observeEvent(input$procesar,{
-  
-  removeModal()
-  
-  # pin_get(board = carpeta,
-  #         name = "tabla_impuesto_renta") %>% 
-  #   bind_rows(
-  #    
-  #     tibble(vivienda = input$gasto_vivienda,
-  #        educacion = input$gasto_educa,
-  #        salud = input$gasto_salud,
-  #        alimentacion = input$gasto_alimen,
-  #        vestimenta = input$gasto_vestimenta,
-  #        turismo =  input$gasto_turismo,
-  #        sexo = input$genero,
-  #        nombre = input$nombre)  
-  #   ) %>% 
-  #   pin(x = .,
-  #       name = "tabla_impuesto_renta",
-  #       board = carpeta,
-  #       description = "Ejecucion",
-  #       versiones = T)
-  
-  
-  
-})
 
+# Reactive values ----------------------------------------------
+
+# Seed table:
 
 tabla_presentar <- reactiveValues(
   presentar = tibble(
@@ -345,31 +373,12 @@ tabla_presentar <- reactiveValues(
   )
 )
 
-observeEvent(input$procesar,{
-  
-  tabla_presentar$presentar <- tibble(
-    ingresos = c(input$ingreso_lab*input$meses + input$ingreso_extra,
-                 NA_real_,NA_real_,NA_real_,NA_real_,NA_real_),
-    gastos_clase = c("Vivienda",
-                     "Educación, arte y cultura",
-                     "Salud",
-                     "Alimentación",
-                     "Vestimenta",
-                     "Turismo"),
-    gastos_valor = c(input$gasto_vivienda,
-                     input$gasto_educa,
-                     input$gasto_salud,
-                     input$gasto_alimen,
-                     input$gasto_vestimenta,
-                     input$gasto_turismo)
-  )
-  
-})
+# Income and proportions of expenses:
 
 tabla_ingresos <- reactive({
   
   tabla_presentar$presentar  %>% 
-    mutate(fraccion = percent(gastos_valor/sum(ingresos,na.rm = T)),
+    mutate(fraccion = gastos_valor/sum(ingresos,na.rm = T),
            total = sum(ingresos,na.rm = T),
            saldo = total - sum(gastos_valor,na.rm = T),
            otros = sum(gastos_valor,na.rm = T) - gastos_valor,
@@ -377,6 +386,8 @@ tabla_ingresos <- reactive({
     mutate(plot = NA_character_)
   
 })
+
+# Plots for the bar of expenses:
 
 plots_barras <- reactive({
   
@@ -391,7 +402,8 @@ plots_barras <- reactive({
        ggplot() +
        geom_col(aes(x = gastos_valor,y = "a"))+
        xlim(c(0,max_gasto))+
-       theme_void()
+       theme_void() +
+       theme(axis.line = element_line(color = "white",linewidth = 3))
    )
  
  plots[c("Vivienda",
@@ -403,6 +415,7 @@ plots_barras <- reactive({
   
 })
 
+# Get the parameters for the IR calculation:
 
 tabla_resumen_impositivo <- reactive({
   
@@ -421,6 +434,8 @@ tabla_resumen_impositivo <- reactive({
          impuesto_excedente,
          cuota)
 })
+
+# Reshape the parameters:
 
 resumen_impositivo_long <- reactive({
   
@@ -443,6 +458,7 @@ resumen_impositivo_long <- reactive({
   
 })
 
+# Income tax calculation:
 
 calculo_impuesto <- reactive({
   
@@ -458,54 +474,71 @@ tabla_ingresos() %>%
 
 })
 
+# Outputs -------------------------------------------------
+
+# Tax calculation arguments:
+
 output$tabla_argumentos <- render_gt({
   
   
   bind_cols(tabla_ingresos(), 
             resumen_impositivo_long())  %>% 
+    select(ingresos,
+           gastos_clase,
+           gastos_valor,
+           plot,
+           fraccion,
+           name,
+           value) %>% 
     gt() %>% 
+    
+    # Column formatting:
+    
     text_transform(
-          locations = cells_body(plot),
-          fn = function(x) {
-            
-          map(plots_barras(),ggplot_image, height = px(30))
-            
-          }
-        ) %>% 
-    tab_options(table.background.color = "#051052") %>%  
-    cols_hide(columns = c(total,saldo,otros,gasto_copia)) %>%
-    cols_align(columns = everything(),align = "center") %>% 
-    cols_label(
-      ingresos = md("**Ingresos (a)**"),
-      gastos_clase = "",
-      gastos_valor = md("**Valor**"),
-      name = md("**Concepto**"),
-      value = md("**Valor**"),
-      plot = "") %>%
+      locations = cells_body(plot),
+      fn = function(x) {
+        
+        map(plots_barras(),ggplot_image, height = px(30))
+        
+      }
+    ) %>% 
+    fmt_currency(
+      columns = c(gastos_valor,ingresos),
+      currency = "USD"
+    )  %>%
+    fmt_percent(
+      columns = fraccion
+    )  %>%
     sub_missing(
       columns = c(ingresos,
                   name,
                   value),
       missing_text = ""
     ) %>% 
+      
+    
+    # Column labeling:
+    
+    cols_align(columns = everything(),
+               align = "center") %>% 
+    cols_label(
+      ingresos = md("**Ingresos (a)**"),
+      gastos_clase = "",
+      gastos_valor = md("**Valor**"),
+      name = md("**Concepto**"),
+      value = md("**Valor**"),
+      plot = "",
+      fraccion = md("**% del ingreso**")) %>%
     tab_spanner(label =  md("**Gastos personales (b)**"),
                 columns = c(gastos_clase,
                             gastos_valor,
-                            plot)) %>%
+                            plot,
+                            fraccion)) %>%
     tab_spanner(label =  md("**Resumen impositivo**"),
                 columns = c(name,
                             value))  %>%
-    fmt_currency(
-      columns = c(gastos_valor,ingresos),
-      currency = "USD"
-    )  %>%
-    # fmt_percent(
-    #   columns = fraccion,
-    #   incl_space = "\n"
-    # )  %>%
-    cols_merge_n_pct(col_n =  gastos_valor,
-                     col_pct = fraccion, 
-                     autohide = TRUE) %>% 
+    
+    # Summaries:
     
     grand_summary_rows(
       columns = c(ingresos, gastos_valor),
@@ -513,17 +546,36 @@ output$tabla_argumentos <- render_gt({
         Total = ~sum(.,na.rm = T)),
       formatter = fmt_currency,
       currency = "USD",
+      use_seps = FALSE,
+      missing_text = ""
+    ) %>%
+    grand_summary_rows(
+      columns = fraccion,
+      fns = list(
+        Total = ~sum(.,na.rm = T)),
+      formatter = fmt_percent,
+      missing_text = "",
       use_seps = FALSE
     ) %>%
+    
+    # Cols with fixed width:
+    
+    cols_width(ingresos ~ px(200),
+               plot ~ px(250)) %>%
+    # Dividers:
+    
     gt_add_divider(columns = "ingresos", 
                    style = "solid") %>%
-    gt_add_divider(columns = "plot", 
+    gt_add_divider(columns = "fraccion", 
                    style = "solid") %>%
-    cols_width(ingresos ~ px(200),
-               plot ~ px(100)) %>%
+    
+    # Footnote:
+    
     gt::tab_footnote(
       footnote = "El valor en paréntesis indica el porcentaje que el gasto anual representa en el total de los ingresos anuales",locations = gt::cells_column_labels(columns = gastos_valor)
     ) %>% 
+    
+    # Cells styles:
     
    tab_style(
      style = list(
@@ -545,7 +597,7 @@ output$tabla_argumentos <- render_gt({
        cell_borders(
          sides = "bottom",
          color = "#03071e",
-         weight = px(2)
+         weight = px(2),
        )
      ),
      locations = list(
@@ -564,21 +616,20 @@ output$tabla_argumentos <- render_gt({
        cells_stub(rows = everything())
      )
   )  %>% 
-    basic_theme(
-      column_labels.background.color = "#3b499c",
-      row.striping.background_color = "#051052"
-    ) %>% 
-    opt_row_striping() 
+    
+    # Theme:
+    
+    table_theme() 
   
 })
 
+# Income tax calculation table:
 
 
 output$tabla_resultado <- render_gt({
 
   calculo_impuesto() %>%
     gt() %>%
-    tab_options(table.background.color = "#051052") %>%
     cols_label(
       preliminar_1 = md('<p align="right">Ingresos gravados (a)<br> - Fracción Básica (c) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Excedente gravado (g)</b></p>'),
       preliminar_2 = md('<p align="right">Total gastos (b)<br> x Cuota deducible (f) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Deducción gastos p. (h)</b></p>'),
@@ -596,116 +647,47 @@ output$tabla_resultado <- render_gt({
       columns = tie
     )  %>%
     cols_width(tie ~ px(150))  %>% 
-    basic_theme(
-      column_labels.background.color = "#3b499c",
-      row.striping.background_color = "#051052"
-    ) %>% 
-    opt_row_striping()  
+    table_theme()  
 
 
 })
+
+
+# Outcome message:
 
 output$mensaje <- renderUI({
   
-   impuesto <- calculo_impuesto() %>% 
+  impuesto <- calculo_impuesto() %>% 
     pull(total)
-   
-   if(impuesto == 0){
-     
-     HTML("
-         <b>!En horabuena, no debes pagar impuesto a la renta¡</b>
-         <br>
-          ")
-     
-   }else{
-     HTML(str_c("
-         <b>El total de impuesto a la renta</b> que debes pagar es de ", impuesto,"$ USD"), 
-         "
-         <br>
-         
-          ")
-   }
+  
+  if(impuesto == 0){
+    
+    HTML("<b>!En horabuena, no debes pagar impuesto a la renta¡</b>
+          <br>")
+    
+  }else{
+    HTML(str_c("<b>El total de impuesto a la renta</b> que debes pagar es de ", impuesto,"$ USD"), 
+         "<br>")
+  }
   
 })
-
-
-
-# output$plot_foot <- renderPlotly({
-#   
-#   set.seed(1984)
-# 
-# vec_gastos <- rnorm(6,100,3)
-#                   
-# conceptos <- tibble( concepto = c( str_c("gasto",1:6),"ingreso no gravado"),
-#                      rubro = c(vec_gastos,800 - sum(vec_gastos))
-# )
-# 
-# gastos <- sum(conceptos[1:6,2])*12
-# 
-# ingresos <- (conceptos[7,2] + sum(vec_gastos))*12
-# 
-# irenta <- 775.55
-# 
-# segunda_layer <- tibble( concepto = c("gastos deducibles",
-#                                       "impuesto renta",
-#                                       "ingreso no gravado"),
-#                          rubro = c(gastos*0.1,irenta,ingresos - gastos*0.1-irenta)
-# ) %>% unnest()
-# 
-# 
-# conceptos <- conceptos %>% mutate(rubro = rubro*12,
-#                                   cs = cumsum(rubro))
-# 
-# segunda_layer <- segunda_layer %>% mutate(cs = cumsum(rubro))
-# 
-# 
-# plot <-
-#   ggplot() +
-#   geom_col(data = conceptos,
-#            mapping = aes(y = "a",
-#                          x = rubro,
-#                          fill = concepto),
-#            position = "stack",width = 0.5) +
-#   geom_label_repel(data = conceptos,
-#              mapping = aes(x = cs,
-#                            y = "a",
-#                            label = concepto,
-#                            color = concepto),
-#              nudge_y = -0.6) +
-#   geom_label_repel(data = segunda_layer,
-#              mapping = aes(x = cs,
-#                            y = "b",
-#                            label = concepto,
-#                            color = concepto),
-#              nudge_y = 0.6) +
-#   geom_col(data = segunda_layer,
-#            mapping = aes(y = "b",
-#                          x = rubro,
-#                          fill = concepto),
-#            position = "stack",width = 0.5) +
-#   scale_x_continuous(labels = dollar) +
-#   # scale_y_continuous() +
-#   theme_void() +
-#   theme(legend.position = "none",
-#         axis.text.x = element_text(),
-#         plot.margin = margin( 0,1, 1, 1, "cm"))
-# 
-#   
-# 
-# ggplotly(plot)
-# 
-# })
 
 ```
 
 
 ```{r}
+
+# Present the parameter table:
+
 gt_output("tabla_argumentos")
 ```
 
 Con los insumos presentados, vamos a calcular el impuesto a la renta:
 
 ```{r}
+
+# Present the outcome table:
+
 gt_output("tabla_resultado")
 
 # plotlyOutput("plot_foot",height = "100px")
@@ -715,6 +697,9 @@ gt_output("tabla_resultado")
 Obligaciones fiscales:
 
 ```{r}
+
+# Message:
+
 uiOutput("mensaje")
 ```
 
@@ -727,14 +712,13 @@ Recuerda que debes presentar:
 
 Verifica el noveno dígito de tu cédula para conocer la fecha en la que debes presentar tu anexo y declaración.
 
-
-
-
 ## + Más para tu conocimiento
 
 Si tienes dudas, puedes consultar los siguientes glosarios:
 
 ```{r}
+
+# Buttons for the glosaries:
 
  actionGroupButtons(
             inputIds = c("glo_gas", "glo_ing", "glo_bas"),
@@ -745,7 +729,6 @@ Si tienes dudas, puedes consultar los siguientes glosarios:
             fullwidth = TRUE
         )
 
-# actionButton(inputId = "guia",label = "Glosario",width = "100%")
 
 ```
 
