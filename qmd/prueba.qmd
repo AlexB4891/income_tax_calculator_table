@@ -498,7 +498,10 @@ output$tabla_argumentos <- render_gt({
       locations = cells_body(plot),
       fn = function(x) {
         
-        map(plots_barras(),ggplot_image, height = px(30))
+        map(plots_barras(),
+            ggplot_image, 
+            height = px(30),
+            aspect_ratio = 3)
         
       }
     ) %>% 
@@ -561,7 +564,7 @@ output$tabla_argumentos <- render_gt({
     # Cols with fixed width:
     
     cols_width(ingresos ~ px(200),
-               plot ~ px(250)) %>%
+               plot ~ px(150)) %>%
     # Dividers:
     
     gt_add_divider(columns = "ingresos", 
