@@ -1,6 +1,6 @@
 ---
-title: "Income tax calculator table for labor contracts in Ecuador"
-subtitle: "Preparate para el nuevo mecanismo de pago del impuesto a renta en Ecuador con esta sencilla aplicación"
+title: "Tabla para el cálculo del impuesto a la renta para empleados bajo relación de dependencia"
+subtitle: "Prepárate para el nuevo mecanismo de pago del impuesto a renta en Ecuador con esta sencilla aplicación"
 author: 
   - Alex Bajaña
   - Carla Chamorro
@@ -12,7 +12,7 @@ format:
     backgroundcolor: "#03071e"
     fontcolor: white
     page-layout: full
-    reference-location: section
+    reference-location: document
 server: shiny
 execute:
   echo: false
@@ -66,11 +66,7 @@ El impuesto a la renta[^1] se aplica sobre aquellas rentas que obtengan las pers
 En cuanto a las personas naturales, aquellas que tengan una relación bajo dependencia o no, que estén o no obligadas[^3] a llevar contabilidad , tienen la obligatoriedad de realizar su declaración de impuesto a la renta anual.
 :::
 
-[^1]: Artículo 2 Ley Orgánica de Régimen Tributario Interno y artículo 1 del Reglamento de la Ley.
 
-[^2]: Las sucesiones indivisas para la liquidación del impuesto a la renta son consideradas como unidades económicas independientes, es decir, que se entienden y tratan como una persona natural. Las sucesiones indivisas son contribuyentes temporales, su existencia comienza con la muerte de una persona natural y termina por orden judicial o por testamento del difunto, es decir, cuando los herederos incorporan la herencia del fallecido a su propio patrimonio (Presidencia de la República del Ecuador, 2010).
-
-[^3]: Son obligados a llevar contabilidad quienes cumplan los siguientes criterios: i) \$300.000 dólares de ingresos brutos en el ejercicio fiscal anterior, ii) \$240.000 dólares de costos y gastos en el ejercicio fiscal anterior, y iii) $180.000 dólares por capital propio al primero de enero de 2022 o al inicio de la actividad (Servicio de Rentas Internas, 2021).  .
 
 ::: column
 ### Relación de dependencia
@@ -88,7 +84,7 @@ Con base en este artículo, la condición de relación bajo dependencia alude a 
 
 ## Cálculo del impuesto a la renta 2022
 
-**El ejemplo está desarrollado para una persona que al mes tiene como ingresos 3 salario básico unificado (SBU 2022), es decir 1416 USD, si quieres generar tu propio cálculo da click en el botón**
+**El ejemplo está desarrollado para una persona que al mes tiene como ingresos 3 salario básico unificado (SBU 2022), es decir 1275 USD, si quieres generar tu propio cálculo da click en el botón**
 
 ```{r}
 actionButton(inputId = "datos",label = "Ingresa tus datos",width = "100%")
@@ -294,7 +290,9 @@ observeEvent(input$datos,
 
 ## Los insumos para el cálculo del impuesto a la renta
 
-En esta tabla encuentra un resumen de tus ingresos,  gastos personales y con ellos en la sección **resumen impositivo**, observa cuales son los parametros para el cálculo del impuesto a la renta.
+En esta tabla encuentra un resumen de tus ingresos y  gastos personales.
+
+Adicioanlmente te presentamos un **resumen impositivo**, que te indica los parámetros a considerar en tu cálculo.
 
 ```{r}
 #| context: server
@@ -350,7 +348,8 @@ tabla_presentar <- reactiveValues(
 observeEvent(input$procesar,{
   
   tabla_presentar$presentar <- tibble(
-    ingresos = c(input$ingreso_lab*input$meses,NA_real_,NA_real_,NA_real_,NA_real_,NA_real_),
+    ingresos = c(input$ingreso_lab*input$meses + input$ingreso_extra,
+                 NA_real_,NA_real_,NA_real_,NA_real_,NA_real_),
     gastos_clase = c("Vivienda",
                      "Educación, arte y cultura",
                      "Salud",
@@ -374,7 +373,33 @@ tabla_ingresos <- reactive({
            total = sum(ingresos,na.rm = T),
            saldo = total - sum(gastos_valor,na.rm = T),
            otros = sum(gastos_valor,na.rm = T) - gastos_valor,
-           gasto_copia = gastos_valor)
+           gasto_copia = gastos_valor) %>% 
+    mutate(plot = NA_character_)
+  
+})
+
+plots_barras <- reactive({
+  
+  max_gasto <- tabla_ingresos() %>% 
+    pull(gastos_valor) %>% 
+    max(.,na.rm = T)
+  
+ plots <- tabla_ingresos() %>% 
+   split(.$gastos_clase) %>% 
+   map(
+     ~.x %>% 
+       ggplot() +
+       geom_col(aes(x = gastos_valor,y = "a"))+
+       xlim(c(0,max_gasto))+
+       theme_void()
+   )
+ 
+ plots[c("Vivienda",
+         "Educación, arte y cultura",
+         "Salud",
+         "Alimentación",
+         "Vestimenta",
+         "Turismo")]
   
 })
 
@@ -437,8 +462,16 @@ output$tabla_argumentos <- render_gt({
   
   
   bind_cols(tabla_ingresos(), 
-            resumen_impositivo_long()) %>% 
+            resumen_impositivo_long())  %>% 
     gt() %>% 
+    text_transform(
+          locations = cells_body(plot),
+          fn = function(x) {
+            
+          map(plots_barras(),ggplot_image, height = px(30))
+            
+          }
+        ) %>% 
     tab_options(table.background.color = "#051052") %>%  
     cols_hide(columns = c(total,saldo,otros,gasto_copia)) %>%
     cols_align(columns = everything(),align = "center") %>% 
@@ -447,7 +480,8 @@ output$tabla_argumentos <- render_gt({
       gastos_clase = "",
       gastos_valor = md("**Valor**"),
       name = md("**Concepto**"),
-      value = md("**Valor**")) %>%
+      value = md("**Valor**"),
+      plot = "") %>%
     sub_missing(
       columns = c(ingresos,
                   name,
@@ -456,7 +490,8 @@ output$tabla_argumentos <- render_gt({
     ) %>% 
     tab_spanner(label =  md("**Gastos personales (b)**"),
                 columns = c(gastos_clase,
-                            gastos_valor)) %>%
+                            gastos_valor,
+                            plot)) %>%
     tab_spanner(label =  md("**Resumen impositivo**"),
                 columns = c(name,
                             value))  %>%
@@ -482,9 +517,14 @@ output$tabla_argumentos <- render_gt({
     ) %>%
     gt_add_divider(columns = "ingresos", 
                    style = "solid") %>%
-    gt_add_divider(columns = "gastos_valor", 
+    gt_add_divider(columns = "plot", 
                    style = "solid") %>%
-    cols_width(ingresos ~ px(200)) %>%
+    cols_width(ingresos ~ px(200),
+               plot ~ px(100)) %>%
+    gt::tab_footnote(
+      footnote = "El valor en paréntesis indica el porcentaje que el gasto anual representa en el total de los ingresos anuales",locations = gt::cells_column_labels(columns = gastos_valor)
+    ) %>% 
+    
    tab_style(
      style = list(
        cell_borders(
@@ -540,11 +580,11 @@ output$tabla_resultado <- render_gt({
     gt() %>%
     tab_options(table.background.color = "#051052") %>%
     cols_label(
-      preliminar_1 = md('<p align="right">Ingresos (a)<br> - Fracción Básica (c) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Ingresos gravados (g)</b></p>'),
+      preliminar_1 = md('<p align="right">Ingresos gravados (a)<br> - Fracción Básica (c) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Excedente gravado (g)</b></p>'),
       preliminar_2 = md('<p align="right">Total gastos (b)<br> x Cuota deducible (f) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Deducción gastos p. (h)</b></p>'),
       preliminar_3 = md('<p align="right">Ingresos gravados (g)<br> x Tasa excedente (e) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Impuesto preliminar (i)</b></p>'),
       total = md('<p align="right">Impuesto preliminar (i)<br> + Impuesto sobre fracción (d)<br> - Deducción gastos (h) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /><b> Impuesto a la renta</b></p>'),
-      tie = md("**¿Cuanto representa el IR en mis ingresos?**")) %>%
+      tie = md("**¿Cuanto representa el *impuesto a la renta* en mis ingresos?**")) %>%
     fmt_currency(
       columns = c(preliminar_1,
                   preliminar_2,
@@ -575,12 +615,6 @@ output$mensaje <- renderUI({
      HTML("
          <b>!En horabuena, no debes pagar impuesto a la renta¡</b>
          <br>
-         Recuerda que debes presentar:
-         <ol>
-         <li> El <b>Anexo de gastos personales</b> en febrero de 2023
-         <li> El <b>Formulario de impuesto a la renta </b> en marzo de 2023
-         </ol>
-         Verifica el último dígito de tu cédula para verificar la fecha de declaración.
           ")
      
    }else{
@@ -588,13 +622,7 @@ output$mensaje <- renderUI({
          <b>El total de impuesto a la renta</b> que debes pagar es de ", impuesto,"$ USD"), 
          "
          <br>
-         Recuerda que debes presentar:
-         <ol>
-         <li> El <b>Anexo de gastos personales</b> en febrero de 2023
-         <li> El <b>Formulario de impuesto a la renta </b> en marzo de 2023
-         </ol>
-         Verifica el último dígito de tu cédula para verificar la fecha de declaración.
-         <br>
+         
           ")
    }
   
@@ -670,6 +698,7 @@ output$mensaje <- renderUI({
 
 ```
 
+
 ```{r}
 gt_output("tabla_argumentos")
 ```
@@ -691,7 +720,19 @@ uiOutput("mensaje")
 
 <br>
 
-**Si tienes dudas, puedes consultar el glosario fiscal**
+Recuerda que debes presentar:
+
+* El <b>Anexo de gastos personales</b>[^4] en febrero de 2023
+* El <b>Formulario de impuesto a la renta </b> en marzo de 2023
+
+Verifica el noveno dígito de tu cédula para conocer la fecha en la que debes presentar tu anexo y declaración.
+
+
+
+
+## + Más para tu conocimiento
+
+Si tienes dudas, puedes consultar los siguientes glosarios:
 
 ```{r}
 
@@ -707,3 +748,12 @@ uiOutput("mensaje")
 # actionButton(inputId = "guia",label = "Glosario",width = "100%")
 
 ```
+
+[^1]: Artículo 2 Ley Orgánica de Régimen Tributario Interno y artículo 1 del Reglamento de la Ley.
+
+[^2]: Las sucesiones indivisas para la liquidación del impuesto a la renta son consideradas como unidades económicas independientes, es decir, que se entienden y tratan como una persona natural. Las sucesiones indivisas son contribuyentes temporales, su existencia comienza con la muerte de una persona natural y termina por orden judicial o por testamento del difunto, es decir, cuando los herederos incorporan la herencia del fallecido a su propio patrimonio (Presidencia de la República del Ecuador, 2010).
+
+[^3]: Son obligados a llevar contabilidad quienes cumplan los siguientes criterios: i) \$300.000 dólares de ingresos brutos en el ejercicio fiscal anterior, ii) \$240.000 dólares de costos y gastos en el ejercicio fiscal anterior, y iii) $180.000 dólares por capital propio al primero de enero de 2022 o al inicio de la actividad (Servicio de Rentas Internas, 2021).  
+
+[^4]: El Anexo de Gastos Personales debe ser presentado si los gastos personales deducibles superan el 50% de la fracción básica desgravada de Impuesto a la Renta de personas naturales. Las personas que trabajan en relación de dependencia no están obligadas a presentar la declaración de Impuesto a la Renta siempre que trabajen con un solo empleador y no proyecten gastos personales, o de haberlo hecho no existan valores que deban ser re liquidados.
+

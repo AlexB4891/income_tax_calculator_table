@@ -4,16 +4,15 @@ format: html
 editor: visual
 ---
 
-##	¿Qué es la base imponible?
-En general, la base imponible está constituida por la totalidad de los ingresos ordinarios y extraordinarios gravados con el impuesto, menos las devoluciones, descuentos, costos, gastos y deducciones, imputables a tales ingresos  (Asamblea Nacional del Ecuador, 2004).
+## ¿Qué es la base imponible?
 
+En general, la base imponible está constituida por la totalidad de los ingresos ordinarios y extraordinarios gravados con el impuesto, menos las devoluciones, descuentos, costos, gastos y deducciones, imputables a tales ingresos (Asamblea Nacional del Ecuador, 2004 [última reforma 2022]).
 
-##	Base imponible de los ingresos del trabajo en relación de dependencia
+## Base imponible de los ingresos del trabajo en relación de dependencia
 
-La base imponible de los ingresos del trabajo en relación de dependencia  está constituida por el ingreso ordinario o extraordinario que se encuentre sometido al impuesto, menos el valor de los aportes personales al IESS, excepto cuando éstos sean pagados por el empleador, sin que pueda disminuirse con rebaja o deducción alguna, excepto los gastos personales (Asamblea Nacional del Ecuador, 2004; Presidencia de la República del Ecuador, 2010). 
+La base imponible de los ingresos del trabajo en relación de dependencia está constituida por el ingreso ordinario o extraordinario que se encuentre sometido al impuesto, menos el valor de los aportes personales al IESS, excepto cuando éstos sean pagados por el empleador, sin que pueda disminuirse con rebaja o deducción alguna, excepto los gastos personales (Asamblea Nacional del Ecuador, 2004 [última reforma 2022]; Presidencia de la República del Ecuador, 2010 [última reforma 2022]).
 
-En otras palabras, la base imponible son los ingresos gravados descontadas las aportaciones personales al IESS y los gastos personales.
-ión de dependencia** se consideran los ingresos gravados más las décimas remuneraciones y los fondos de reserva.  Este ingreso representa la capacidad económica que puede tener un individuo.
+En otras palabras, la base imponible son los ingresos gravados descontadas las aportaciones personales al IESS y los gastos personales. 
 
 ```{r echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -59,4 +58,3 @@ read_excel("~/income_tax_calculator_table/qmd/data/franjas.xlsx") %>%
     ) %>% 
     opt_row_striping()  
 ```
-
