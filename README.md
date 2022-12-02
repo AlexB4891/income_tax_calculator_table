@@ -33,13 +33,11 @@ As of 2022, Ecuadorians who are required to declare personal income tax will fac
 
   - <https://www.sri.gob.ec/web/intersri/ruc-personas-naturales>
   
-Para ingresar a la aplición tienes dos opciones:
+Acces to the app in the two versions:
 
 * [Spanish version](https://datascienceinf.shinyapps.io/income_tax_calculator/)
 * [English version](https://datascienceinf.shinyapps.io/table_app_en/)
 
-87 / 5.000
-Resultados de traducción
 ## Technical details
 
 - The table was developed in R 4.2.1
@@ -57,6 +55,8 @@ library(gtExtras)
 library(shinyWidgets)
 
 ```
+
+The table was deployed using a HTML Quarto document.
 
 ## User's guide
 
