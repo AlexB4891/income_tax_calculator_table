@@ -5,7 +5,7 @@
 ### Authors:
 
 - Alex Bajaña (alexvbr@ergostats.org)
--Carla Chamorro (carlachamorro@gmail.com)
+- Carla Chamorro (carlachamorro@gmail.com)
 
 ## Categories:
 
@@ -35,7 +35,7 @@ As of 2022, Ecuadorians who are required to declare personal income tax will fac
   
 Acces to the app in the two versions:
 
-* [Spanish version](https://datascienceinf.shinyapps.io/income_tax_calculator/)
+* [Spanish version](https://datascienceinf.shinyapps.io/table_app_es/)
 * [English version](https://datascienceinf.shinyapps.io/table_app_en/)
 
 ## Technical details
