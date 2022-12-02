@@ -35,8 +35,8 @@ As of 2022, Ecuadorians who are required to declare personal income tax will fac
   
 Para ingresar a la aplición tienes dos opciones:
 
-* [Versión en español](https://datascienceinf.shinyapps.io/income_tax_calculator/?_ga=2.268723953.1064023296.1670015093-1899560843.1670015093)
-* [Versión en ingles](https://datascienceinf.shinyapps.io/table_app_en/?_ga=2.268723953.1064023296.1670015093-1899560843.1670015093)
+* [Spanish version](https://datascienceinf.shinyapps.io/income_tax_calculator/)
+* [English version](https://datascienceinf.shinyapps.io/table_app_en/)
 
 87 / 5.000
 Resultados de traducción
