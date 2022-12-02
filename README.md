@@ -58,7 +58,80 @@ library(shinyWidgets)
 
 ```
 
-## Guia de usuario
+## User's guide
+
+First some key concepts:
+
+1.	**Income tax in Ecuador:** Income tax is levied on income obtained by individuals, undivided estates and corporations, whether domestic or foreign. The tax year is from January 1 to December 31 (National Assembly of Ecuador, 2004; Presidency of the Republic of Ecuador, 2010).
+
+Individuals, whether they are dependent or not, and whether or not they are obliged to keep accounting records, are obliged to file their annual income tax return.
+
+2.	**Dependency relationship:** Article 8 of the Labor Code defines an individual contract as: "(...) an agreement by virtue of which a person undertakes to render lawful and personal services to another or others, under their dependence, for a remuneration fixed by the agreement, the law, the collective contract or custom" (National Congress, 2005).
+
+Based on this article, the condition of a dependent relationship refers to the fact that the worker maintains a relationship of subordination to his employer and obedience to the provisions for the development of labor activities.
+
+## How is the 2022 income tax calculated?
+
+
+To calculate the income tax for each taxpayer, go to the section *Income Tax Calculation 2022*.
+
+![image](https://user-images.githubusercontent.com/58230734/205386792-04f3a10d-fa9c-4840-acba-67822bf7f19a.png)
+
+
+By clicking on the button *Enter your data* the following options are displayed:
+
+![image](https://user-images.githubusercontent.com/58230734/205386897-65bacea0-5109-4557-923f-eba0b35d33fc.png)
+
+
+Consider that the monthly salary corresponds to the liquid income minus the personal contributions to the Ecuadorian Institute of Social Security. To this value must be added other income such as: utilities, commissions, overtime or other bonuses, in case the taxpayer receives them.
+
+![image](https://user-images.githubusercontent.com/58230734/205386950-079bd8c2-e314-456b-89d8-92c3abccfc60.png)
+
+The following subsection indicates the number of months of work the taxpayer had.
+
+![image](https://user-images.githubusercontent.com/58230734/205387017-f91517bb-3f78-4747-b79a-dfcbf1b33faf.png)
+
+In the next subsection of the drop-down list, the amounts of personal expenses for each item should be included.
+ 
+![image](https://user-images.githubusercontent.com/58230734/205387050-121e316e-508b-45c8-b432-9753be1de2a3.png)
+
+By hovering the cursor over the name of each type of personal expense, the list of expenses that can be included for deduction is displayed. 
+
+Once the personal income and expenses have been entered, click on the button Continue to know the amount of income tax to be paid.
+
+## What is considered for the 2022 income tax calculation?
+
+To arrive at the taxable base, taxpayers under a dependency relationship can deduct personal contributions to the Ecuadorian Institute of Social Security, personal expenses and exemptions for disability and senior citizens . 
+
+In the section Inputs for the income tax calculation it is possible to visualize the personal income and expenses that the taxpayer entered. As for personal expenses, it shows how much each expense item represents in income.
+
+Additionally, through the tax summary it is possible to know the parameters established for the bracket in which the taxpayer's taxable income falls and the share of personal expenses to which he/she is entitled.
+
+![image](https://user-images.githubusercontent.com/58230734/205387127-af2c78a3-0a69-4705-bb07-11571b58a3c0.png)
+
+Based on the income, personal expenses, parameters established for the bracket in which the taxable income falls and the amount of personal expenses that the taxpayer can deduct, the calculation of the income tax due is made as shown in the following table:
+
+![image](https://user-images.githubusercontent.com/58230734/205387175-ab4ad8e6-0ef3-4dd1-b75f-2ed893b0c1bf.png)
+
+After calculating the amount of income tax to be paid, the last column of the table indicates how much income tax represents the taxpayer's income, i.e., it is possible to know the tax burden of the taxpayer.
+
+Next, a message appears indicating whether or not the taxpayer must pay income tax for the 2022 tax period.
+
+It is important to know the filing dates of both the Personal Expenses Schedule and the Personal Income Tax Return, in order to avoid fines.
+
+![image](https://user-images.githubusercontent.com/58230734/205387205-2bc9e4ad-730c-46a4-9644-b29b64119b05.png)
+
+For further information on personal income tax, glossaries are available detailing the personal expenses that the taxpayer can deduct, conceptualizations of income and taxable income, and the income tax table used in this practical exercise.
+
+![image](https://user-images.githubusercontent.com/58230734/205387235-3722370f-6ff6-4175-b411-c8298a8681f8.png)
+
+Finally, there are notes specifying definitions of terms and considerations to keep in mind.
+
+![image](https://user-images.githubusercontent.com/58230734/205387257-e04b4c9a-758e-4d55-a955-2193e99da858.png)
+
+
+
+
 
 
 
