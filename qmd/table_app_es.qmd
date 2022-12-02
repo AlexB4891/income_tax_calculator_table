@@ -1,0 +1,776 @@
+---
+title: "Tabla para el cálculo del impuesto a la renta para empleados bajo relación de dependencia"
+subtitle: "Prepárate para el nuevo mecanismo de pago del impuesto a renta en Ecuador con esta sencilla aplicación"
+author: 
+  - Alex Bajaña 
+  - Carla Chamorro 
+date: November, 2022
+title-block-banner: true
+format: 
+  html:
+    css: css/new_css.css
+    backgroundcolor: "#03071e"
+    fontcolor: white
+    page-layout: full
+    reference-location: document
+server: shiny
+execute:
+  echo: false
+  warning: false
+project:
+  type: website
+---
+
+
+```{r setup}
+
+#| include: false 
+
+#  Libraries:
+
+library(shiny)
+library(tidyverse)
+library(gt)
+library(shinyBS)
+library(tippy)
+library(scales)
+library(readxl)
+library(gtExtras)
+library(shinyWidgets)
+
+# File with the exempt income brackets
+
+franjas <- read_excel("data/franjas.xlsx")
+
+# Custom theme for the tables in the app:
+
+table_theme <- function(data, ...){
+  data %>% 
+    tab_options(
+      table.background.color = "#03071e",
+      column_labels.background.color = "#3b499c",
+      row.striping.background_color = "#051052",
+      ...
+    ) %>% 
+    opt_row_striping()
+}
+
+
+```
+
+## Conceptos principales
+
+<div class="row">
+
+::: column
+### El impuesto a la renta en Ecuador
+
+------------------------------------------------------------------------
+
+El impuesto a la renta[^1] se aplica sobre aquellas rentas que obtengan las personas naturales, las sucesiones indivisas[^2] y las sociedades sean nacionales o extranjeras. El ejercicio impositivo comprende del 1 de enero al 31 de diciembre (Asamblea Nacional del Ecuador, 2004; Presidencia de la República del Ecuador, 2010).
+
+En cuanto a las personas naturales, aquellas que tengan una relación bajo dependencia o no, que estén o no obligadas[^3] a llevar contabilidad , tienen la obligatoriedad de realizar su declaración de impuesto a la renta anual.
+:::
+
+
+
+::: column
+### Relación de dependencia
+
+------------------------------------------------------------------------
+
+El Código del Trabajo en su artículo 8 define al contrato individual como: "(...) convenio en virtud del cual una persona se compromete para con otra u otras a prestar sus servicios lícitos y personales, bajo su dependencia, por una remuneración fijada por el convenio, la ley, el contrato colectivo o la costumbre" (Congreso Nacional, 2005).
+
+Con base en este artículo, la condición de relación bajo dependencia alude a que el trabajador mantiene una relación de subordinación frente a su patrono y de obediencia a las disposiciones para el desarrollo de las actividades laborales.
+:::
+
+<br>
+
+------------------------------------------------------------------------
+
+## Cálculo del impuesto a la renta 2022
+
+**El ejemplo está desarrollado para una persona que al mes tiene como ingresos 3 salario básico unificado (SBU 2022), es decir 1275 USD, si quieres generar tu propio cálculo da click en el botón**
+
+```{r}
+
+# Init button:
+
+actionButton(inputId = "datos",
+             label = "Ingresa tus datos",
+             width = "100%")
+```
+
+<br>
+
+
+```{r modal-events}
+#| context: server
+
+# Launch the modal dialog with all the inputs:
+
+observeEvent(input$datos,{
+  showModal(
+    modalDialog(
+      h2("Cuentanos un poco sobre ti:"),
+      HTML("Para declarar tus ingresos y gastos considera valores mensuales."),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "ingreso_lab", 
+                     label =   div(icon("money-bill-wheat", style = "color:white;"),
+                                   HTML("	&nbsp;	&nbsp;	&nbsp;¿Cual es tu salario mensual?")),
+                     min = 1,
+                     max = 999999,
+                     value = 472),
+        tooltip = "Considera unicamente los ingresos bajo relación de dependencia. Tu salario mensual corresponde a tu ingreso líquido menos tus aportaciones al IESS.", 
+        placement = "right"
+      ),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "ingreso_extra", 
+                     label =  div(icon("money-bill-trend-up", style = "color:white;"),
+                                  HTML("	&nbsp;	&nbsp;	&nbsp;¿Recibes otros ingresos como: utilidades, comisiones, horas extras u otros sobresueldos?")),
+                     min = 1,
+                     max = 999999,
+                     value = 500),
+        tooltip = "Estos ingresos se sumaran a tus ingresos laborales totales. Considera un estimado anual.", 
+        placement = "right"
+      ),
+      hr(),
+      with_tippy(
+        sliderInput(inputId = "meses",
+                    label = div(icon("calendar-days", style = "color:white;"),
+                                HTML("	&nbsp;	&nbsp;	&nbsp;Número de meses trabajados:")),
+                    min = 1,
+                    max = 12,
+                    value = 12),
+        tooltip = "Número de meses que trabajas con un mismo empleador", 
+        placement = "right"),
+      h2("Declaración de gastos personales"),
+      HTML("Para declarar tus ingresos y gastos considera valores valores estimados anuales."),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "gasto_vivienda", 
+                     label =  div(icon("house", style = "color:white;"),
+                                  HTML("	&nbsp;	&nbsp;	&nbsp;Vivienda")),
+                     min = 1,
+                     max = 999999,
+                     value = 472),
+        tooltip = HTML("<ul>
+                        <li>Arriendo 
+                        <li>Intereses préstamo hipotecario 
+                        <li>Servicios básicos
+                        <li>Impuesto predial 
+                        <li>Pensiones alimenticias
+                        <li>Otros gastos destinados a la adquisición, construcción, remodelación, ampliación, mejora y mantenimiento de un único bien inmueble. 
+                        </ul> 
+En todos los casos señalados en este rubro y en los anteriores, los gastos serán considerados en razón de una sola vivienda."), 
+        placement = "right"),
+      hr(),
+      with_tippy(
+        numericInput(inputId = "gasto_educa", 
+               label =  div(icon("school", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Educación, arte y cultura")),
+               min = 1,
+               max = 999999,
+               value = 472),
+        tooltip = HTML("<ul>
+                        <li>Matrícula y pensión 
+                        <li>Útiles y textos escolares 
+                        <li>Educación para personas con discapacidad
+                        <li>Cuidado y/o desarrollo infantil 
+                        <li>Uniformes
+                        <li>Artes vivas y escénicas, literarias y narrativas, cinematográficas y audiovisuales, musicales y sonoras
+                        <li>Promoción y difusión de la memoria social y el patrimonio
+                        <li>Artesanías
+                        <li>Pensiones alimenticias
+                        </ul>"), 
+        placement = "right"),
+hr(),
+    with_tippy(
+      numericInput(inputId = "gasto_salud", 
+                   label =  div(icon("notes-medical", style = "color:white;"),
+                                HTML("	&nbsp;	&nbsp;	&nbsp;Salud")),
+                   min = 1,
+                   max = 999999,
+                   value = 472),
+      tooltip = HTML("<ul>
+                        <li>Honorarios profesionales de salud
+                        <li>Servicios de salud
+                        <li>Medicamentos, insumos médicos, lentes, órtesis, prótesis y otros accesorios para la salud
+                        <li>Medicina prepagada y prima de seguro médico
+                        <li>Deducible no reembolsado de la liquidación del seguro privado
+                        <li>Pensiones alimenticias
+                        <li>Otros gastos: Relacionados para el bienestar físico y mental, así como aquellos destinados a la prevención, recuperación y rehabilitación de la salud
+                        </ul>"), 
+      placement = "right"),
+hr(),
+with_tippy(
+  numericInput(inputId = "gasto_alimen", 
+               label =  div(icon("utensils", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Alimentación")),
+               min = 1,
+               max = 999999,
+               value = 472),
+  tooltip = HTML("<ul>
+                        <li>Compras de alimentos para consumo humano y otros productos naturales o artificiales que el ser humano ingiere para subsistir o para su nutrición
+                        <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
+                        <li>Compra de alimentos en centros de expendio de alimentos preparados.
+                        </ul>"), 
+  placement = "right"),
+hr(),
+with_tippy(
+  numericInput(inputId = "gasto_vestimenta", 
+               label =  div(icon("shirt", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Vestimenta")),
+               min = 1,
+               max = 999999,
+               value = 472),
+  tooltip = HTML("<ul>
+                        <li>Se considerarán gastos de vestimenta los realizados por cualquier tipo de prenda de vestir
+                        <li>Pensiones alimenticias, debidamente sustentadas en acta de mediación o resolución judicial
+                        </ul>"), 
+  placement = "right"),
+hr(),
+with_tippy(
+  numericInput(inputId = "gasto_turismo", 
+               label =  div(icon("compass", style = "color:white;"),
+                            HTML("	&nbsp;	&nbsp;	&nbsp;Turismo")),
+               min = 1,
+               max = 999999,
+               value = 472),
+  tooltip = HTML("<ul>
+                        <li>Alojamiento
+                        <li>Transporte
+                        <li>Servicios de alimentos y bebidas
+                        <li>Operación turística
+                        <li>Intermediación turísticas
+                        <li>Parques de atracciones
+                        <li>Pensiones alimentacias
+                        </ul>"), 
+  placement = "right"),
+
+footer = tagList(
+  actionButton(inputId = "procesar",
+               label = "Continuar",width = "100%") ,
+  size = "l"
+), style = "overflow-x: auto;"
+    )
+  )
+})
+
+# Execute the calculations:
+
+observeEvent(input$procesar,{
+  
+  tabla_presentar$presentar <- tibble(
+    ingresos = c(input$ingreso_lab*input$meses + input$ingreso_extra,
+                 NA_real_,NA_real_,NA_real_,NA_real_,NA_real_),
+    gastos_clase = c("Vivienda",
+                     "Educación, arte y cultura",
+                     "Salud",
+                     "Alimentación",
+                     "Vestimenta",
+                     "Turismo"),
+    gastos_valor = c(input$gasto_vivienda,
+                     input$gasto_educa,
+                     input$gasto_salud,
+                     input$gasto_alimen,
+                     input$gasto_vestimenta,
+                     input$gasto_turismo)
+  )
+  
+  removeModal()
+})
+
+# Glosaries modals ------------------------------------------------
+
+# Expenses glosary:
+
+observeEvent(input$glo_gas,{
+             showModal(
+               modalDialog(
+                          includeHTML("glosario_gastos.html"),
+                 footer = actionButton(inputId = "close_glo_gas","Cerrar"),
+                 size = "l", style = "overflow-wrap: break-word;"
+               )
+             )
+  })
+
+observeEvent(input$close_glo_gas,{
+  removeModal()
+})
+
+# Income glosary:
+
+observeEvent(input$glo_ing,{
+             showModal(
+               modalDialog(
+                          includeHTML("glosario_ingresos.html"),
+                 footer = actionButton(inputId = "close_glo_ing","Cerrar"),
+                 size = "l", style = "overflow-wrap: break-word;"
+               )
+             )
+  })
+
+observeEvent(input$close_glo_ing,{
+  removeModal()
+})
+
+# Taxable income glosary:
+
+observeEvent(input$glo_bas,{
+             showModal(
+               modalDialog(
+                          includeHTML("glosario_bases.html"),
+                 footer = actionButton(inputId = "close_glo_bas","Cerrar"),
+                 size = "l", style = "overflow-wrap: break-word;"
+               )
+             )
+  })
+
+observeEvent(input$close_glo_bas,{
+  removeModal()
+})
+
+
+```
+
+## Los insumos para el cálculo del impuesto a la renta
+
+En esta tabla encuentra un resumen de tus ingresos y  gastos personales.
+
+Adicionalmente te presentamos un **resumen impositivo**, que te indica los parámetros a considerar en tu cálculo.
+
+```{r}
+#| context: server
+
+
+# Reactive values ----------------------------------------------
+
+# Seed table:
+
+tabla_presentar <- reactiveValues(
+  presentar = tibble(
+    ingresos = c(425*3*12,NA_real_,NA_real_,NA_real_,NA_real_,NA_real_),
+    gastos_clase = c("Vivienda",
+                     "Educación, arte y cultura",
+                     "Salud",
+                     "Alimentación",
+                     "Vestimenta",
+                     "Turismo"),
+     gastos_valor = c( 3000, # input$gasto_vivienda,
+                       2160, # input$gasto_educa,
+                       1800, # input$gasto_salud,
+                       2640, # input$gasto_alimen,
+                       1200, # input$gasto_vestimenta,
+                       800   # input$gasto_turismo
+       )
+    
+  )
+)
+
+# Income and proportions of expenses:
+
+tabla_ingresos <- reactive({
+  
+  tabla_presentar$presentar  %>% 
+    mutate(fraccion = gastos_valor/sum(ingresos,na.rm = T),
+           total = sum(ingresos,na.rm = T),
+           saldo = total - sum(gastos_valor,na.rm = T),
+           otros = sum(gastos_valor,na.rm = T) - gastos_valor,
+           gasto_copia = gastos_valor) %>% 
+    mutate(plot = NA_character_)
+  
+})
+
+# Plots for the bar of expenses:
+
+plots_barras <- reactive({
+  
+  max_gasto <- tabla_ingresos() %>% 
+    pull(gastos_valor) %>% 
+    max(.,na.rm = T)
+  
+ plots <- tabla_ingresos() %>% 
+   split(.$gastos_clase) %>% 
+   map(
+     ~.x %>% 
+       ggplot() +
+       geom_col(aes(x = gastos_valor,y = "a"))+
+       xlim(c(0,max_gasto))+
+       theme_void() +
+       theme(axis.line = element_line(color = "white",linewidth = 3))
+   )
+ 
+ plots[c("Vivienda",
+         "Educación, arte y cultura",
+         "Salud",
+         "Alimentación",
+         "Vestimenta",
+         "Turismo")]
+  
+})
+
+# Get the parameters for the IR calculation:
+
+tabla_resumen_impositivo <- reactive({
+  
+  income <- tabla_ingresos() %>% 
+    pull(ingresos) %>% 
+    reduce(sum,na.rm = T)
+  
+  franjas %>% 
+  mutate(comparacion = income,
+         across(.cols = c(fraccion_basica,exceso_hasta,impuesto_fraccion ),as.numeric),
+         regla = comparacion > fraccion_basica & comparacion < exceso_hasta,
+         cuota = if_else(income > 24090.3,0.1,0.2)) %>% 
+  filter(regla) %>% 
+  select(fraccion_basica,
+         impuesto_fraccion,
+         impuesto_excedente,
+         cuota)
+})
+
+# Reshape the parameters:
+
+resumen_impositivo_long <- reactive({
+  
+  tabla_resumen_impositivo() %>% 
+    mutate(across(c(fraccion_basica,
+                    impuesto_fraccion),
+                  scales::dollar),
+           across(c(impuesto_excedente,
+                    cuota),
+                  scales::percent)) %>% 
+    pivot_longer(cols = everything()) %>% 
+    mutate(name = case_when(
+      name == "fraccion_basica" ~ "Fracción básica (c)",
+      name == "impuesto_fraccion" ~ "Impuesto sobre la fracción básica (d)",
+      name == "impuesto_excedente" ~ "Tasa sobre el excedente (e)",
+      name == "cuota" ~ "Cuota deducible (f)"
+    )) %>% 
+    bind_rows(tibble(name = c(NA_character_,NA_character_),
+                     value = c(NA_character_,NA_character_)))
+  
+})
+
+# Income tax calculation:
+
+calculo_impuesto <- reactive({
+  
+tabla_ingresos() %>% 
+    summarise(across(c(ingresos, gastos_valor),sum,na.rm = T)) %>% 
+    mutate(gastos_valor = pmin(gastos_valor,754.17*7)) %>% 
+    cbind(tabla_resumen_impositivo()) %>% 
+    transmute(preliminar_1 = ingresos-fraccion_basica,
+              preliminar_2 = cuota*gastos_valor,
+              preliminar_3 = preliminar_1*impuesto_excedente,
+              total = impuesto_fraccion + preliminar_3 - preliminar_2,
+              total = if_else(total < 0,0,total),
+              tie = total/ingresos) 
+
+})
+
+# Deducible expenses message:
+
+output$expenses <- renderUI({
+  
+  gastos <- tabla_ingresos() %>% 
+    summarise(across(c(ingresos, gastos_valor),sum,na.rm = T)) %>% 
+    pull(gastos_valor)
+  
+  
+  if(gastos > 754.17*7){
+    
+    HTML("Tus gastos <b>superan</b> el monto legal deducible equivlante a 7 canastas básicas familiares  es decir 5279.19 USD. <b>Se aplica este valor como tu deducción de gastos personales.</b><br><br>")
+    
+  }else{
+    
+    HTML("Tus gastos son deducibles de acuerdo a la cuota presentada en la tabla.")
+    
+  }
+  
+})
+
+# Outputs -------------------------------------------------
+
+# Tax calculation arguments:
+
+output$tabla_argumentos <- render_gt({
+  
+  
+  bind_cols(tabla_ingresos(), 
+            resumen_impositivo_long())  %>% 
+    select(ingresos,
+           gastos_clase,
+           gastos_valor,
+           plot,
+           fraccion,
+           name,
+           value) %>% 
+    gt() %>% 
+    
+    # Column formatting:
+    
+    text_transform(
+      locations = cells_body(plot),
+      fn = function(x) {
+        
+        map(plots_barras(),
+            ggplot_image, 
+            height = px(30),
+            aspect_ratio = 3)
+        
+      }
+    ) %>% 
+    fmt_currency(
+      columns = c(gastos_valor,ingresos),
+      currency = "USD"
+    )  %>%
+    fmt_percent(
+      columns = fraccion
+    )  %>%
+    sub_missing(
+      columns = c(ingresos,
+                  name,
+                  value),
+      missing_text = ""
+    ) %>% 
+      
+    
+    # Column labeling:
+    
+    cols_align(columns = everything(),
+               align = "center") %>% 
+    cols_label(
+      ingresos = md("**Ingresos (a)**"),
+      gastos_clase = "",
+      gastos_valor = md("**Valor**"),
+      name = md("**Concepto**"),
+      value = md("**Valor**"),
+      plot = "",
+      fraccion = md("**% del ingreso**")) %>%
+    tab_spanner(label =  md("**Gastos personales (b)**"),
+                columns = c(gastos_clase,
+                            gastos_valor,
+                            plot,
+                            fraccion)) %>%
+    tab_spanner(label =  md("**Resumen impositivo**"),
+                columns = c(name,
+                            value))  %>%
+    
+    # Summaries:
+    
+    grand_summary_rows(
+      columns = c(ingresos, gastos_valor),
+      fns = list(
+        Total = ~sum(.,na.rm = T)),
+      formatter = fmt_currency,
+      currency = "USD",
+      use_seps = FALSE,
+      missing_text = ""
+    ) %>%
+    grand_summary_rows(
+      columns = fraccion,
+      fns = list(
+        Total = ~sum(.,na.rm = T)),
+      formatter = fmt_percent,
+      missing_text = "",
+      use_seps = FALSE
+    ) %>%
+    
+    # Cols with fixed width:
+    
+    cols_width(ingresos ~ px(200),
+               plot ~ px(150)) %>%
+    # Dividers:
+    
+    gt_add_divider(columns = "ingresos", 
+                   style = "solid") %>%
+    gt_add_divider(columns = "fraccion", 
+                   style = "solid") %>%
+    
+    # Footnote:
+    
+    # gt::tab_footnote(
+    #   footnote = "El valor en paréntesis indica el porcentaje que el gasto anual representa en el total de los ingresos anuales",locations = gt::cells_column_labels(columns = gastos_valor)
+    # ) %>% 
+    
+    # Cells styles:
+    
+   tab_style(
+     style = list(
+       cell_borders(
+         sides = c("top", "bottom"),
+         color = "#051052",
+         weight = px(2)
+       ),
+       cell_borders(
+         sides = c("top", "bottom"),
+         color = "#051052",
+         weight = px(2)
+       ),
+       cell_borders(
+         sides = c("top", "bottom"),
+         color = "#051052",
+         weight = px(2)
+       ),
+       cell_borders(
+         sides = "bottom",
+         color = "#03071e",
+         weight = px(2),
+       )
+     ),
+     locations = list(
+       cells_body(
+         columns = c(ingresos),
+         rows = is.na(ingresos)
+       ),
+       cells_body(
+         columns = name,
+         rows = is.na(name)
+       ),
+       cells_body(
+         columns = value,
+         rows = is.na(value)
+       ),
+       cells_stub(rows = everything())
+     )
+  )  %>% 
+    
+    # Theme:
+    
+    table_theme() 
+  
+})
+
+# Income tax calculation table:
+
+
+output$tabla_resultado <- render_gt({
+
+  calculo_impuesto() %>%
+    gt() %>%
+    cols_label(
+      preliminar_1 = md('<p align="right">Ingresos gravados (a)<br> - Fracción Básica (c) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Excedente gravado (g)</b></p>'),
+      preliminar_2 = md('<p align="right">Total gastos (b)<br> x Cuota deducible (f) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Deducción gastos p. (h)</b></p>'),
+      preliminar_3 = md('<p align="right">Ingresos gravados (g)<br> x Tasa excedente (e) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /> <b>Impuesto preliminar (i)</b></p>'),
+      total = md('<p align="right">Impuesto preliminar (i)<br> + Impuesto sobre fracción (d)<br> - Deducción gastos (h) <hr style=" background-color: #5399EE; height:2pt; margin-bottom:-1px; margin-top:-1px;" /><b> Impuesto a la renta</b></p>'),
+      tie = md("**¿Cuanto representa el *impuesto a la renta* en mis ingresos?**")) %>%
+    fmt_currency(
+      columns = c(preliminar_1,
+                  preliminar_2,
+                  preliminar_3,
+                  total),
+      currency = "USD"
+    )  %>%
+    fmt_percent(
+      columns = tie
+    )  %>%
+    cols_width(tie ~ px(150))  %>% 
+    table_theme()  
+
+
+})
+
+
+# Outcome message:
+
+output$mensaje <- renderUI({
+  
+  impuesto <- calculo_impuesto() %>% 
+    pull(total)
+  
+  if(impuesto == 0){
+    
+    HTML("<b>!En hora buena, no debes pagar impuesto a la renta¡</b>
+          <br>")
+    
+  }else{
+    HTML(str_c("<b>El total de impuesto a la renta</b> que debes pagar es de ", impuesto,"$ USD"), 
+         "<br>")
+  }
+  
+})
+
+```
+
+
+```{r}
+
+# Present the parameter table:
+
+gt_output("tabla_argumentos")
+```
+
+
+```{r}
+uiOutput("expenses")
+```
+
+Con los insumos presentados, vamos a calcular el impuesto a la renta:
+
+```{r}
+
+# Present the outcome table:
+
+gt_output("tabla_resultado")
+
+# plotlyOutput("plot_foot",height = "100px")
+
+```
+
+Obligaciones fiscales:
+
+```{r}
+
+# Message:
+
+uiOutput("mensaje")
+```
+
+<br>
+
+Recuerda que debes presentar:
+
+* El <b>Anexo de gastos personales</b>[^4] en febrero de 2023
+* El <b>Formulario de impuesto a la renta </b> en marzo de 2023
+
+Verifica el noveno dígito de tu cédula para conocer la fecha en la que debes presentar tu anexo y declaración.
+
+## + Más para tu conocimiento
+
+Si tienes dudas, puedes consultar los siguientes glosarios:
+
+```{r}
+
+# Buttons for the glosaries:
+
+ actionGroupButtons(
+            inputIds = c("glo_gas", "glo_ing", "glo_bas"),
+            labels = list("Glosario de gastos",
+                          "Glosario de ingresos",
+                          "Glosario base imponible"),
+            status = "primary",
+            fullwidth = TRUE
+        )
+
+
+```
+
+<br>
+<br>
+Para información adicional puedes contactar con los autores:
+
+  - Alex Bajaña (alexvbr@ergostats.org)
+  - Carla Chamorro (carlachamorro@gmail.com)
+
+[^1]: Artículo 2 Ley Orgánica de Régimen Tributario Interno y artículo 1 del Reglamento de la Ley.
+
+[^2]: Las sucesiones indivisas para la liquidación del impuesto a la renta son consideradas como unidades económicas independientes, es decir, que se entienden y tratan como una persona natural. Las sucesiones indivisas son contribuyentes temporales, su existencia comienza con la muerte de una persona natural y termina por orden judicial o por testamento del difunto, es decir, cuando los herederos incorporan la herencia del fallecido a su propio patrimonio (Presidencia de la República del Ecuador, 2010).
+
+[^3]: Son obligados a llevar contabilidad quienes cumplan los siguientes criterios: i) \$300.000 dólares de ingresos brutos en el ejercicio fiscal anterior, ii) \$240.000 dólares de costos y gastos en el ejercicio fiscal anterior, y iii) $180.000 dólares por capital propio al primero de enero de 2022 o al inicio de la actividad (Servicio de Rentas Internas, 2021).  
+
+[^4]: El Anexo de Gastos Personales debe ser presentado si los gastos personales deducibles superan el 50% de la fracción básica desgravada de Impuesto a la Renta de personas naturales. Las personas que trabajan en relación de dependencia no están obligadas a presentar la declaración de Impuesto a la Renta siempre que trabajen con un solo empleador y no proyecten gastos personales, o de haberlo hecho no existan valores que deban ser re liquidados.
+

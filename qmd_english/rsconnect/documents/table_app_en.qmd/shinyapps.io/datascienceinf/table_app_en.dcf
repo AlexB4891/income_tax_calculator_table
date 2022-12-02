@@ -1,0 +1,15 @@
+name: table_app_en
+title: table_app_en
+username:
+account: datascienceinf
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7799248
+bundleId: 6583668
+url: https://datascienceinf.shinyapps.io/table_app_en/
+when: 1670015087.79852
+lastSyncTime: 1670015087.79855
+quarto_version: 1.1.189
+quarto_engines: knitr
+asMultiple: FALSE
+asStatic: FALSE

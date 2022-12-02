@@ -1,7 +1,0 @@
-## Diccionario
-### $suces_ind Las sucesiones indivisas
-Para la liquidación del impuesto a la renta son consideradas como unidades económicas independientes, es decir, que se entienden y tratan como una persona natural. Las sucesiones indivisas son contribuyentes temporales, su existencia comienza con la muerte de una persona natural y termina por orden judicial o por testamento del difunto, es decir, cuando los herederos incorporan la herencia del fallecido a su propio patrimonio (Presidencia de la República del Ecuador, 2010).
-## $obligadas Obligadas
-Son obligados a llevar contabilidad quienes cumplan los siguientes criterios: i) $300.000 dólares de ingresos brutos en el ejercicio fiscal anterior, ii) $240.000 dólares de costos y gastos en el ejercicio fiscal anterior, y iii) $180.000 dólares por capital propio al primero de enero de 2022 o al inicio de la actividad (Servicio de Rentas Internas, 2021).
-## $obligados Obligados
-Son obligados a llevar contabilidad quienes cumplan los siguientes criterios: i) $300.000 dólares de ingresos brutos en el ejercicio fiscal anterior, ii) $240.000 dólares de costos y gastos en el ejercicio fiscal anterior, y iii) $180.000 dólares por capital propio al primero de enero de 2022 o al inicio de la actividad (Servicio de Rentas Internas, 2021). 

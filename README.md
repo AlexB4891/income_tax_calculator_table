@@ -1,92 +1,69 @@
-# Tabla calculadora del impuesto a la renta
+# Income tax calculator table for individuals under a dependency relationship
 
-## Un proyecto del Centro de Investigación Estadística ERGOSTATS
+## A project of the ERGOSTATS Statistical Research Center
 
-### Autores:
+### Authors:
 
-- Alex Bajaña
-- Carla Chamorro
+- Alex Bajaña (alexvbr@ergostats.org)
+-Carla Chamorro (carlachamorro@gmail.com)
 
-## Un poco de contexto
+## Categories:
 
-El impuesto a la renta en Ecuador se aplica a empresas e individuos. Cuando hablamos de un individuo distinguimos dos principales condiciones de trabajo: relación de dependencia (trabajo con contrato laboral y prestaciones) y actividad económica autonoma. Esta distinción no solo se refleja en las condiciones laborales a las que un individuo se debe acoger sino que tambien en el mecanismo de pago del impuesto a la renta personal. 
+- Submission type: *Single table example*
 
-En el primer caso, es decir los individuos que trabajan en relación de dependencia, el mecanismo de pago del impuesto a la renta puede llegar a ser complejo e incluso cuando la documentación es extensa, se pueden generar confusiones a la hora de realizar la declaración de este impuesto. Nuestra aplicación es un esfuerzo por reducir la complejidad y la dificultad inherente al pago de este impuesto empleando tablas de fácil comprensión e interpretación, de suerte que los individuos puedan anticipar la carga económica que implica el impuesto a la renta. 
-
-Nos concentramos en el caso que trabajan de manera exclusiva bajo **relación de dependencia** dado que la información de ingresos y gastos es reportada por el empleador, esto facilita la identificación de los valores que efectivamente percibe y gasta un individuo y que están registrados en las bases de datos públicas del Ecuador. 
-
-El pago del impuesto a la renta va acompañado de deducciones, exoneraciones, beneficios e incentivos que se dictan en las normas tributarias ecuatorianas. En ese sentido, nuestra aplicación no solo permite la anticipación al monto a pagar por el impuesto sino que permite entender de manera holistica cuales son las herramientas de planificación tributaria que un individuo bajo relación de dependencia puede hacer uso en su declaración del impuesto a la renta de personas naturales. 
-
-A partir de 2022 los ecuatorianos que están obligados a declarar el impuesto a la renta de personas naturales se enfrentan a una nueva estructura para la declaración de este tributo. Si ya de por si la complejidad del reporte de este impuesto causaba confusión, este periodo fiscal que se avecina estará acompañado de incertidumbre hasta que los individuos se acostumbren a este cambio. La aplicación que desarrollamos busca tambien educar a los individuos que trabajan bajo relación de dependencia sobre este cambio, de suerte que a la hora de presentar su declaración de impuesto a la renta no solo lo hagan como parte de sus obligaciones tribuarias sino que tambien den su aporte a la promoción de la cultura tributarias.
-
-## ¿Como funciona?
-
-- Lo primero que debes hacer para hacer uso de la aplicación es conocer tu situación en el registro único de contribuyentes RUC. Si no eres ecuatoriano y quieres conocer cual sería tu carga impositiva si trabajaras en Ecuador puedes revisar los principales conceptos en el siguiente enlace:
-
-  - <https://www.sri.gob.ec/web/intersri/ruc-personas-naturales>
-  
-  - Documento que explique que es la relacion de dependencia
-  
-  - Impuesto a la renta de personas naturales
-  
-  - Ingreso económico vs ingreso bruto (diferencia: concepción de la capacidad económica del invidividuo)
-  
-  - ¿Que es la base imponible?
-  
-    - Como era en 2021
-    
-    - Como es en 2022
-  
-  - Tablas de base imponible (pop up reactivo al ingreso declarado)
-  
-  - Gastos personales, detalles
-  
-  * Todo esto esta en el articulo 10 de la LORTI (una nota en la esquina de la tabla que nos permita revisar la legislación)
-  
- ![](borrador_ejemplo.png)
- 
-- Posterior a ello deberás hacer un calculo de tus **ingresos mensuales bajo relación de dependencia** que es la suma de tus **sueldos, salarias, comisiones y otros ingresos percibidos**. En la aplicación tendrás campos para los conceptos de ingresos más importantes en Ecuador. Asi mismo es importante que conozcas de manera aproximada cuales son los gastos en los que incurristes durante el año y su detalle. 
-
-- Navega en los menus desplegables para definir de manera aducada tu perfil de contribuyente, vas a encontrar campos relacionados a tu actividad económica, tu relación con otras fuentes de ingresos, entre otros detalles. 
-
-- Para los calculos del impuesto a la renta hemos desarollado la libreria `ircalculatoR` la cual podras instalar de la siuiente manera:
-
-```
-
-library(remotes)
-
-install_github("https://github.com/AlexB4891/ircalculatoR")
-
-```
-  Encuentra ejemplos del código sobr algunos ejemplos en el enlace:
-  
-  <URL de una presentación Quarto>
-  
-
-## Detalles técnicos
-
-- La tabla fue desarrollada en R 4.2.1
-- Empleamos las librerias:
-
-```
-library(tidyverse)
-library(htmltools)
-library(gt)
-library(gtExtras)
-library(rlang)
-library(shiny)
-
-```
-
-- Submision type: *Single table example*
-
-- Categoria: `interactive-Shiny`
+- Category: `interactive-Shiny`
 
 - Industry: *public sector*, *tax administration*
 
-Revisa la aplicación en el siguiente enlace:
+## A bit of context
 
-<URL de la aplicacion/tabla>
+Income tax in Ecuador applies to companies and individuals. When we talk about an individual, we distinguish two main working conditions: dependency relationship (work with employment contract and benefits) and autonomous economic activity. This distinction is not only reflected in the working conditions that an individual must accept, but also in the payment mechanism of the personal income tax.
+
+In the first case, that is to say, the individuals who work in a dependency relationship, the income tax payment mechanism can become complex and even when the documentation is extensive, confusion can be generated when making the tax return. this tax. Our application is an effort to reduce the complexity and difficulty inherent in paying this tax by using tables that are easy to understand and interpret, so that individuals can anticipate the economic burden that income tax implies.
+
+We focus on the case that they work exclusively under **dependency relationship** since the information on income and expenses is reported by the employer, this facilitates the identification of the amounts that an individual actually receives and spends and that are registered in the public databases of Ecuador.
+
+The payment of income tax is accompanied by deductions, exemptions, benefits and incentives that are dictated in Ecuadorian tax regulations. In this sense, our application not only allows anticipation of the amount to be paid for the tax, but also allows a holistic understanding of the tax planning tools that an individual under a dependency relationship can use in their income tax return. of natural persons.
+
+As of 2022, Ecuadorians who are required to declare personal income tax will face a new structure for declaring this tax. If the complexity of reporting this tax already caused confusion, this upcoming fiscal period will be accompanied by uncertainty until individuals get used to this change. The application that we developed also seeks to educate individuals who work under a dependency relationship about this change, so that when filing their income tax return they not only do so as part of their tax obligations but also give their contribution to the promotion of tax culture.
+
+## How does it work?
+
+- The first thing you must do to make use of the application is to know your situation in the single taxpayer registry RUC. If you are not Ecuadorian and want to know what your tax burden would be if you worked in Ecuador, you can review the main concepts in the following link:
+
+  - <https://www.sri.gob.ec/web/intersri/ruc-personas-naturales>
+  
+Para ingresar a la aplición tienes dos opciones:
+
+* [Versión en español](https://datascienceinf.shinyapps.io/income_tax_calculator/?_ga=2.268723953.1064023296.1670015093-1899560843.1670015093)
+* [Versión en ingles](https://datascienceinf.shinyapps.io/table_app_en/?_ga=2.268723953.1064023296.1670015093-1899560843.1670015093)
+
+87 / 5.000
+Resultados de traducción
+## Technical details
+
+- The table was developed in R 4.2.1
+- We use the libraries:
+
+```
+library(shiny)
+library(tidyverse)
+library(gt)
+library(shinyBS)
+library(tippy)
+library(scales)
+library(readxl)
+library(gtExtras)
+library(shinyWidgets)
+
+```
+
+## Guia de usuario
+
+
+
+
+
 
 
 

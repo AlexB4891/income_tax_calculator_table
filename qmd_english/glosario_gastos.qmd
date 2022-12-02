@@ -1,0 +1,215 @@
+---
+title: "Glosario de términos"
+format: html
+editor: visual
+---
+
+## Gastos personales
+
+Individuals will enjoy a rebate on income tax caused by their personal expenses, applicable before allocating tax credits to which they are entitled in accordance with the Law. According to Ecuadorian regulations, taxpayers may deduct their personal expenses in six items for 2022: Health; Education, art and culture; Clothing; Food; Housing; and Domestic tourism.
+
+In order to establish the maximum amount of the rebate mentioned in the preceding paragraph, the following rules must be observed (National Assembly of Ecuador, 2004; last amendment 2022):
+
+a)  If your annual gross income (including exempt income) does not exceed two point thirteen (2.13) basic income tax deductible fractions, the maximum amount of the personal expense allowance will be the amount resulting from applying the following formula:
+
+$$R= L \times 20%$$
+
+Where:
+
+$R:$ personal expense allowance
+
+$L:$ The lesser of the declared personal expenses for the annual tax period and the value of the basic food basket multiplied by seven.
+
+b)  If your annual gross income (including exempt income) exceeds two point thirteen (2.13) basic fractions deducted from income tax during the fiscal year:
+
+$$R= L \times 10%$$
+
+$R:$ personal expense allowance
+
+$L:$ The lesser of the declared personal expenses for the annual tax period and the value of the basic food basket multiplied by seven.
+
+For purposes of this calculation, the value of the Basic Family Basket as of December of the fiscal year in which the tax is paid, according to the data published by the National Institute of Statistics and Census, shall be considered.
+
+**Personal expenses must be supported by validly issued sales receipts.**
+
+To quantify personal expenses, those incurred by the parents, spouse or common-law partner and dependent children of the taxpayer or his/her spouse or common-law partner may be considered, provided that they do not receive taxable income; however, in any case, VAT and ECI must be excluded from the transactions.
+
+## But, what expenses can I deduct?
+
+### HOUSING
+
+**lease:**
+
+Lease of a single property used for housing.
+
+**Interest, mortgage loan:**
+
+Interest on mortgage loans granted by authorized institutions, destined for the expansion, remodeling, restoration, acquisition or construction of a single dwelling used for housing. In this case, the certificates conferred by the institution that granted the credit; or the respective debit reflected in the account statements or passbooks will be sufficient evidence.
+
+**Basic services:**
+
+Payments for basic services including water, gas, electricity, conventional telephone and condominium fees for a single property used for housing.
+
+**Property tax:**
+
+Property taxes on a single piece of real estate used for housing.
+
+**Alimony:**
+
+Alimony, duly supported by mediation or judicial resolution.
+
+**Other expenses:**
+
+For the acquisition, construction, remodeling, remodeling, expansion, improvement and maintenance of a single real estate property. In all the cases indicated in this item and in the previous ones, the expenses will be considered on the basis of a single dwelling.
+
+------------------------------------------------------------------------
+
+### EDUCATION, ART AND CULTURE
+
+**Tuition and pension:**
+
+Tuition and pension at all levels of the educational system, initial, basic general education, high school and higher education, as well as tuition, refresher courses, professional training seminars duly approved by the Ministry of Education or Labor when applicable or by the National Council of Higher Education as the case may be.
+
+-   School transportation.
+-   Grade fees.
+-   Payment of interest on educational loans granted by duly authorized institutions.
+
+**School supplies and textbooks:**
+
+School supplies, textbooks, computer equipment and didactic materials used in education.
+
+**Education for people with disabilities:**
+
+Special education services for people with disabilities, provided by centers and by professionals recognized by the competent bodies.
+
+**Child care and/or development:**
+
+Services provided by child care and/or development centers and didactic material for child development.
+
+**Uniforms:**
+
+Uniforms.
+
+**Live and performing arts:**
+
+Dance, theater, opera, mime, circus arts, magic, performance, puppetry and video dance.
+
+**Plastic, visual and applied arts:**
+
+Drawing, painting, sculpture, restoration, engraving, ceramics, non-cosmetic tattoo, mural, photography, video art and installations, pottery, silkscreen printing, carving and illustration.
+
+**Literary and narrative arts:**
+
+Training and instruction in these areas, payment for recitals, shows and live events related to them, as well as payments for the acquisition of books and magazines.
+
+**Cinematographic and audiovisual arts:**
+
+Training and instruction in these areas, payment for exhibitions, shows and audiovisual and cinematographic events.
+
+**Musical and sound arts:**
+
+Training and instruction in these areas, payment for concerts, recitals, musicals and other types of live musical events and shows, as well as payments for the purchase of musical instruments and accessories for such instruments.
+
+**Promotion and dissemination of social memory and heritage:**
+
+Training and instruction in these areas, payments for entrance fees and services of memory repositories (museum, archive and library).
+
+**Handicrafts:**
+
+Acquisition of handmade handicrafts made by artisans qualified by the competent agencies.
+
+**Alimony::**
+
+Alimony, duly supported by mediation or judicial resolution.
+
+------------------------------------------------------------------------
+
+### HEALTH
+
+**Health professional fees:**
+
+Fees of physicians and health professionals with a professional degree endorsed by the National Council of Higher Education.
+
+**Health services:**
+
+Health services provided by authorized clinics, hospitals, laboratories and pharmacies..
+
+**Medicines and others:**
+
+Medicines, medical supplies, eyeglasses, orthotics, prostheses and other health accessories.
+
+**Prepaid medical and health insurance premium:**
+
+Prepaid medicine and medical insurance premiums in individual and corporate contracts. In cases where these values correspond to a corporate policy and they are deducted from the taxpayer's payment record, this document will be valid to support the corresponding expense.
+
+**Insurance deductible:**
+
+The unreimbursed deductible of the private insurance settlement.
+
+**Alimony:**
+
+Alimony, duly supported by mediation or judicial resolution.
+
+**Other expenses:**
+
+Related to physical and mental well-being, as well as those aimed at prevention, recovery and rehabilitation of health.
+
+------------------------------------------------------------------------
+
+### FOOD
+
+**Food:**
+
+Purchases of food for human consumption and other natural or artificial products that humans ingest for subsistence or nutrition.
+
+**Alimony:**
+
+Alimony, duly supported by mediation or judicial resolution.
+
+**Restaurants:**
+
+Purchase of food in prepared food vending centers.
+
+------------------------------------------------------------------------
+
+### CLOTHING
+
+**Clothing:**
+
+Clothing expenses are considered to be those incurred for any type of clothing.
+
+**Alimony:**
+
+Alimony, duly supported by mediation or judicial resolution.
+
+------------------------------------------------------------------------
+
+### TOURISM
+
+**Lodging:**
+
+Expenses for tourist lodging within the Ecuadorian territory in all its modalities will be considered.
+
+**Transportation:**
+
+Passenger transportation, including air, sea, river and land transportation, and rental of vehicles hired or used for domestic tourism within Ecuadorian territory.
+
+**Food and beverage service:**
+
+Gastronomic services in restaurants, bars and similar, where food and/or non-alcoholic beverages for human consumption are sold, acquired by individuals during their tourist activities within Ecuadorian territory, will be considered.
+
+**Tourist operation:**
+
+Packages, tours, and other tourist services provided by tour operators within Ecuadorian territory.
+
+**Tourism intermediation**
+
+Tourism services agencies; organization of events, congresses and conventions within Ecuadorian territory.
+
+**Amusement parks:**
+
+Stable amusement parks within Ecuadorian territory will be considered.
+
+**Alimony:**
+
+Alimony, duly supported by mediation or judicial resolution.

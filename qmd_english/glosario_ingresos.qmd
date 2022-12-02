@@ -1,0 +1,17 @@
+---
+title: "Glosario de terminos"
+format: html
+editor: visual
+---
+
+## Taxable income
+
+They are all those incomes coming from work under a relationship of dependency, economic activity, or work and capital that the tax administration recognizes to be subject to income tax under the general regime.
+
+**The taxable income of individuals under a dependency relationship are**: unified monthly remuneration (salary or wage as appropriate), bonuses and profit sharing.
+
+## Gross income
+
+This is all the income received from each of the sources of income identified, whether it comes from the relationship of dependency, from the business economic activity or from capital and work without making any type of discount.
+
+**In the case of individuals under a dependency relationship**, taxable income plus the tenths of remunerations and reserve funds are considered. This income represents the economic capacity that an individual may have.
